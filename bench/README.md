@@ -37,8 +37,7 @@ PLATFORM=a76 CPU_PIN=6 sudo -E bash bench/frequency.sh restore
 
 每轮取中位数，跨轮给均值与 95% 置信区间；论文里的数字都是**单核、锁频**下的挂钟时间。
 
-**注意**：`LOCAL_VALIDATION.md` 里说明了本地 WSL + QEMU 只做功能验证，QEMU 下的
-时间数字没有意义，计时必须在目标板卡上跑。
+**注意**：WSL + QEMU 只用于功能验证，计时在目标板卡上完成（见 `LOCAL_VALIDATION.md`）。
 
 ## 输出
 

@@ -92,12 +92,15 @@ PLATFORM=a76 CPU_PIN=6 sudo -E bash bench/frequency.sh restore
 
 协议与逐平台数字见 [`bench/README.md`](bench/README.md)。
 
-## 验证状态与边界
+## 验证范围
 
-- 三个平台均在目标板卡上完成编译、正确性与计时，结果为 `target_campaign=PASS`。
-- 正确性：`ORACLE_MODE=all ORACLE_CASES=20000` 的随机用例、`CORE_EQUIV_TESTS=100000` 的核心等价测试、`KEM_TRANSCRIPT_CASES=1000` 的端到端会话，以及 GCC/Clang 在 `-O0 -O1 -O2 -O3 -Os` 下的一致哈希。
-- 本地（WSL + QEMU）只做功能验证，**没有**做原生计时与原生时序筛查；这两项以板卡结果为准。详见各包 `LOCAL_VALIDATION.md`。
-- 本项目**不做形式化验证**（见各包 `VERIFICATION.md` 第 9 节），常数时间性质也未作证明，只给出范围与安全边界说明（`RANGE_AND_SECURITY.md`）。
+三个平台都在目标板卡上完成编译、正确性、编译器一致性与计时，结果为 `target_campaign=PASS`。
+
+- 正确性：随机用例 `ORACLE_MODE=all ORACLE_CASES=20000`，核心等价测试 `CORE_EQUIV_TESTS=100000`，端到端会话 `KEM_TRANSCRIPT_CASES=1000`。
+- 编译器一致性：GCC 与 Clang 在 `-O0 -O1 -O2 -O3 -Os` 下给出同一份哈希。
+- WSL + QEMU 用于功能验证，计时数据取自目标板卡，细节见各包 `LOCAL_VALIDATION.md`。
+
+这里的证据是测试与测量。形式化验证和常数时间证明不在本工作范围内，算法的适用范围与安全边界见 `RANGE_AND_SECURITY.md`。
 
 ## 许可
 
