@@ -4,7 +4,7 @@
 #
 # 用法：
 #   PLATFORM=a76 CPU_PIN=6 sudo -E bash bench/frequency.sh set
-#   PLATFORM=a76 CPU_PIN=6 bash bench/frequency.sh restore
+#   PLATFORM=a76 CPU_PIN=6 sudo -E bash bench/frequency.sh restore
 #   PLATFORM=a76 CPU_PIN=6 bash bench/frequency.sh status
 #
 # LOCK_MAX_FREQ=1 时同时把 scaling_min_freq 顶到 cpuinfo_max_freq。
@@ -38,6 +38,7 @@ case "$ACTION" in
     ;;
   *)
     echo "usage: PLATFORM=<a53|a76|x1c> CPU_PIN=<n> bash bench/frequency.sh {set|restore|status} [state_file]" >&2
+    echo "       set and restore write cpufreq sysfs; prefix them with sudo -E" >&2
     exit 2
     ;;
 esac

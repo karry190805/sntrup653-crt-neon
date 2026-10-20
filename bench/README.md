@@ -8,7 +8,7 @@ bench/
   run_polymul.sh    多项式乘法单次调用 A/B      -> 论文表 1
   run_kem.sh        KEM 分阶段与端到端 A/B      -> 论文表 2
   run_sessions.sh   五组 ABBA/BAAB 会话级复测   -> 表 1、表 2 的置信区间
-  frequency.sh      锁定/还原 CPU 频率（set 需要 sudo）
+  frequency.sh      锁定/还原 CPU 频率（set、restore 需要 sudo）
   ablation.sh       单因素消融
 ```
 
@@ -19,7 +19,7 @@ bench/
 PLATFORM=a76 CPU_PIN=6 bash bench/run_polymul.sh
 PLATFORM=a76 CPU_PIN=6 sudo -E bash bench/frequency.sh set
 PLATFORM=a76 CPU_PIN=6 bash bench/run_kem.sh
-bash bench/frequency.sh restore
+PLATFORM=a76 CPU_PIN=6 sudo -E bash bench/frequency.sh restore
 ```
 
 ## 测量协议

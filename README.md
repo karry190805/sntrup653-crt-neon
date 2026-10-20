@@ -73,13 +73,13 @@ target_campaign=PASS
 
 多项式乘法单次调用（论文表 1，单核、锁频）：
 
-| 平台 | 编译器 | 基线/ms | 优化/ms | 加速比 |
+| 平台 | 编译器 | 基线/ms | 优化/ms | 加速比（倍） |
 |---|---|---|---|---|
-| Cortex-A53 | GCC 14.2.0 | 0.33915 | 0.09225 | 3.68× |
-| Cortex-A76 | GCC 12.2.0 | 0.08056 | 0.03070 | 2.62× |
-| Cortex-X1C | GCC 15.2.0 | 0.05099 | 0.01494 | 3.41× |
+| Cortex-A53 | GCC 14.2.0 | 0.33915 | 0.09225 | 3.68 |
+| Cortex-A76 | GCC 12.2.0 | 0.08056 | 0.03070 | 2.62 |
+| Cortex-X1C | GCC 15.2.0 | 0.05099 | 0.01494 | 3.41 |
 
-KEM 端到端（一次密钥生成 + 封装 + 解封装，论文表 2，单核、锁频）：1.06×（A53）、1.04×（A76）、1.07×（X1C）。各项的 95% 置信区间与逐阶段数据见论文。
+KEM 端到端（一次密钥生成 + 封装 + 解封装，论文表 2，单核、锁频）：1.06 倍（A53）、1.04 倍（A76）、1.07 倍（X1C）。各项的 95% 置信区间与逐阶段数据见论文。
 
 逐轮原始数据、五组会话复测和消融结果在 `results/`，文件与表格的对应关系见 [`results/README.md`](results/README.md)。
 
@@ -89,7 +89,7 @@ KEM 端到端（一次密钥生成 + 封装 + 解封装，论文表 2，单核�
 PLATFORM=a76 CPU_PIN=6 sudo -E bash bench/frequency.sh set   # 锁定频率
 PLATFORM=a76 CPU_PIN=6 bash bench/run_polymul.sh             # 表 1
 PLATFORM=a76 CPU_PIN=6 bash bench/run_kem.sh                 # 表 2
-bash bench/frequency.sh restore
+PLATFORM=a76 CPU_PIN=6 sudo -E bash bench/frequency.sh restore
 ```
 
 协议与逐平台数字见 [`bench/README.md`](bench/README.md)。

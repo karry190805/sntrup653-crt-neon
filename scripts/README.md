@@ -28,7 +28,7 @@ g 1 1 1 ...
 重新生成：
 
 ```bash
-python scripts/gen_testcases.py
+python3 scripts/gen_testcases.py
 ```
 
 ## 板卡侧的分工

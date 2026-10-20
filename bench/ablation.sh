@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 单因素消融：逐个关掉 NEON 路径、公开零裁剪、第一层特化等，看各自的贡献。
+# 单因素消融：逐个关掉 NEON 路径、公开补零模式、第一层特化等，看各自的贡献。
 # 包装 packages/sntrup653-crt-cortex-<PLATFORM>/run_ablation.sh。
 #
 # 用法：PLATFORM=a53 CPU_PIN=2 bash bench/ablation.sh
