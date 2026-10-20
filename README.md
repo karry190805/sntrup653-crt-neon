@@ -1,5 +1,7 @@
 # sntrup653-crt-neon
 
+[![selftest](https://github.com/karry190805/sntrup653-crt-neon/actions/workflows/selftest.yml/badge.svg)](https://github.com/karry190805/sntrup653-crt-neon/actions/workflows/selftest.yml)
+
 面向 sntrup653 的单项式因子 CRT 多项式乘法及 AArch64 NEON 实现。本仓库是论文的配套代码，包含三个平台（Cortex-A53 / A76 / X1C）的自包含交付包，以及按算法层次切开的代码分块视图。
 
 ## 两种视角，同一份代码
@@ -45,7 +47,8 @@ VERIFICATION.md / RANGE_AND_SECURITY.md / LOCAL_VALIDATION.md   验证与适用�
 
 ```bash
 cd packages/sntrup653-crt-cortex-a76
-sudo bash ./run_on_target.sh
+sudo QUICK=1 bash ./run_on_target.sh --no-pack   # 短流程，几分钟，先确认环境
+sudo bash ./run_on_target.sh                      # 完整流程，含计时与打包
 ```
 
 需要 root：脚本要锁定频率并绑定测量核。依赖（未安装过时执行一次）：
