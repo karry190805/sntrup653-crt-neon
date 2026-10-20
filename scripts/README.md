@@ -31,12 +31,10 @@ g 1 1 1 ...
 python scripts/gen_testcases.py
 ```
 
-## 与板卡侧的关系
+## 板卡侧的分工
 
-| 检查 | 在哪跑 | 命令 |
-|---|---|---|
-| 分块视图 == 源文件 | 任意机器 | `python tools/join.py` |
-| 固定测例 == Python oracle | 任意机器 | `python scripts/check_testcases.py` |
-| C 核心 == Python oracle（1971 用例） | 板卡 | `bash run_correctness.sh`（包内，`check_oracle_hash.py` 强制哈希） |
-| C 核心 == 基线（100000 用例） | 板卡 | `bash run_correctness.sh` |
-| GCC/Clang × 5 个优化等级一致哈希 | 板卡 | `bash run_on_target.sh` |
+| 检查 | 命令（包内） |
+|---|---|
+| C 核心 == Python oracle（1971 用例，`check_oracle_hash.py` 强制哈希）与 == 基线（100000 用例） | `bash run_correctness.sh` |
+| GCC/Clang × 5 个优化等级一致哈希 | `bash run_on_target.sh` |
+| 计时 | 见 `../bench/` |
