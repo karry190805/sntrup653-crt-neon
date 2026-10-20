@@ -1,10 +1,23 @@
 # sntrup653-crt-neon
 
-面向 sntrup653 的单项式因子 CRT 多项式乘法及 AArch64 NEON 实现。本仓库是论文的配套代码，包含三个平台（Cortex-A53 / A76 / X1C）的自包含交付包，以及核心实现的**分块索引**。
+面向 sntrup653 的单项式因子 CRT 多项式乘法及 AArch64 NEON 实现。本仓库是论文的配套代码，包含三个平台（Cortex-A53 / A76 / X1C）的自包含交付包，以及按算法层次切开的**核心代码分块视图**。
 
-- 核心源文件：`packages/sntrup653-crt-cortex-a53/optimized/crypto_core_multsntrup653.c`（1434 行）
-- 三个平台包中的该文件逐字节相同，哈希见各包的 `SOURCE_MANIFEST.sha256`
-- 分块与论文小节的对应关系见 [CODE_MAP.md](CODE_MAP.md)
+## 两种视角，同一份代码
+
+| 用途 | 位置 |
+|---|---|
+| 编译、复现表 1 与表 2 | `packages/sntrup653-crt-cortex-{a53,a76,x1c}/optimized/crypto_core_multsntrup653.c`（1434 行，三个包逐字节相同） |
+| 阅读、在论文里引用 | `src/01_params.c` … `src/19_entry.c`（19 个文件，与论文 §3 各小节对应） |
+
+`src/` 由 `tools/split.py` 从上面那份源文件**原样切分**生成（只给每块加一段注释头，不改一个字节）；`tools/join.py` 去掉注释头再拼接，与源文件比对 SHA-256，结果一致。
+
+```text
+source : 37fb5e97dcd2b5360d651bfe4bdd21e79a6e8e71aa479020d67a4ee986f46919
+joined : 37fb5e97dcd2b5360d651bfe4bdd21e79a6e8e71aa479020d67a4ee986f46919
+result : OK
+```
+
+之所以不做成"每块一个编译单元"，是因为测评用的二进制必须和交付包完全一致：拆成多个编译单元会改变内联与代码布局，表 1、表 2 的数字就不再对应仓库里的代码。分块视图只用于阅读和引用。
 
 ## 目录
 
@@ -13,8 +26,11 @@ packages/
   sntrup653-crt-cortex-a53/    Cortex-A53 交付包（KICKPI K2B，Allwinner H618）
   sntrup653-crt-cortex-a76/    Cortex-A76 交付包（Radxa ROCK 5B+，RK3588）
   sntrup653-crt-cortex-x1c/    Cortex-X1C 交付包（Radxa Dragon Q8B，Snapdragon 8cx Gen 3）
+src/                           分块视图 B01–B19（由 split.py 生成，勿手改）
 tools/
   blocks.json                  分块定义（唯一数据源）
+  split.py                     切分 + 自校验
+  join.py                      还原校验
   make_links.py                生成 CODE_MAP.md 与论文 LaTeX 片段
 paper/
   code_map.tex                 代码分块索引表（可直接 \input）
@@ -22,7 +38,7 @@ paper/
 CODE_MAP.md                    分块索引（Markdown）
 ```
 
-每个包内部结构一致：
+每个交付包内部结构一致：
 
 ```text
 optimized/     本文实现（NEON 版多项式乘法 + KEM 胶合层）
@@ -71,19 +87,21 @@ KEM 端到端（一次密钥生成 + 封装 + 解封装，论文表 2）：1.06�
 
 ## 代码分块
 
-`CODE_MAP.md` 把核心源文件切成 19 块（B01–B19），每块给出论文小节、主要函数/宏、行号，以及 GitHub 行号永久链接，例如十六维加权卷积主核：
+`CODE_MAP.md` 给出 19 块（B01–B19）与论文小节、原文件行号、`src/` 文件的对应关系，例如十六维加权卷积主核：
 
 ```text
-https://github.com/<OWNER>/<REPO>/blob/<COMMIT>/packages/sntrup653-crt-cortex-a53/optimized/crypto_core_multsntrup653.c#L984-L1025
+https://github.com/<OWNER>/<REPO>/blob/<COMMIT>/src/14_w16_kernel.c
 ```
 
-链接固定到某个提交，代码以后再变也不会失效。更新方法：
+链接固定到某个提交，且指向整文件，代码以后再变也不会失效。更新方法：
 
 ```bash
+git push                                   # 先推代码
 python tools/make_links.py --owner <账号> --repo <仓库名> --ref <提交>
+git commit -am "pin code links" && git push
 ```
 
-脚本会重写 `CODE_MAP.md`、`paper/code_map.tex` 与 `paper/code_availability.tex`；分块边界只在 `tools/blocks.json` 里维护。
+分块边界只在 `tools/blocks.json` 里维护，改完依次跑 `split.py`、`make_links.py` 即可。
 
 ## 验证状态与边界
 

@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 """生成核心代码分块索引（CODE_MAP.md）与论文用 LaTeX 片段。
 
 用法：
@@ -6,15 +6,15 @@
     python tools/make_links.py --owner alice --repo sntrup653-crt-neon --ref <commit>
     python tools/make_links.py --ref main          # 用分支名（不推荐放进论文）
 
-链接永远指向同一个文件：packages/sntrup653-crt-cortex-a53/optimized/crypto_core_multsntrup653.c
-（三个平台包中的该文件逐字节相同，见 packages/*/SOURCE_MANIFEST.sha256）。
+链接指向 src/ 下的分块文件（整文件，行号不会漂移）。
+src/ 由 tools/split.py 从 packages/sntrup653-crt-cortex-a53/optimized/
+crypto_core_multsntrup653.c 原样切分生成，tools/join.py 可校验还原一致。
 """
 import argparse
 import json
 import os
 import re
 import subprocess
-import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -36,10 +36,6 @@ def guess_repo():
     return "", ""
 
 
-def guess_ref():
-    return sh("git", "rev-parse", "HEAD") or "main"
-
-
 def load_blocks():
     with open(os.path.join(HERE, "blocks.json"), encoding="utf-8") as f:
         meta = json.load(f)
@@ -49,53 +45,61 @@ def load_blocks():
     return meta, blocks
 
 
+def tex_escape(name):
+    return name.replace("_", "\\_\\allowbreak{}")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--owner")
     ap.add_argument("--repo")
     ap.add_argument("--ref")
-    ap.add_argument("--file", default=None, help="覆盖默认的核心源文件路径")
     args = ap.parse_args()
 
     meta, blocks = load_blocks()
-    path = args.file or meta["canonical_path"]
-    owner, repo = args.owner, args.repo
+    owner = args.owner or ""
+    repo = args.repo or ""
     if not owner or not repo:
         g_owner, g_repo = guess_repo()
         owner = owner or g_owner or "OWNER"
         repo = repo or g_repo or "sntrup653-crt-neon"
-    ref = args.ref or guess_ref()
+    ref = args.ref or sh("git", "rev-parse", "HEAD") or "main"
 
     base = "https://github.com/%s/%s" % (owner, repo)
-    blob = "%s/blob/%s/%s" % (base, ref, path)
+    core = "%s/blob/%s/%s" % (base, ref, meta["canonical_path"])
 
     def url(b):
-        return "%s#L%d-L%d" % (blob, b["start"], b["end"])
+        return "%s/blob/%s/%s/%s" % (base, ref, meta["view_dir"], b["file"])
 
     # ---------- CODE_MAP.md ----------
     md = []
     md.append("# 核心代码分块索引\n")
-    md.append("论文第 3 节的核心多项式乘法实现在同一个源文件里。三个平台交付包中的该文件逐字节相同"
-              "（SHA-256 见各包的 `SOURCE_MANIFEST.sha256`），因此全部分块都指向同一份代码：\n")
-    md.append("```text\n%s   （共 %d 行）\n```\n" % (path, meta["total_lines"]))
-    md.append("链接格式为 GitHub 行号永久链接 `.../blob/<commit>/<file>#L<起>-L<止>`，"
-              "当前固定到提交 `%s`；代码若再变动，重新运行 `python tools/make_links.py --ref <新提交>` 即可。\n" % ref)
-    md.append("| 块 | 论文小节 | 内容 | 主要函数 / 宏 | 行号 | 链接 |")
+    md.append("仓库里同一份核心实现有两种视角：\n")
+    md.append("- **可编译、被测评的那一份**：`%s`（%d 行）" % (meta["canonical_path"], meta["total_lines"]))
+    md.append("- **按算法层次切开的阅读视图**：`%s/` 下的 %d 个文件（B01–B%02d）"
+              % (meta["view_dir"], len(blocks), len(blocks)))
+    md.append("")
+    md.append("`src/` 由 `tools/split.py` 从上面那份源文件原样切分（只在每块前加注释头，不改代码），"
+              "`tools/join.py` 去掉注释头后拼接并比对 SHA-256，可复现原文件。"
+              "所以引用某个块时用 `src/` 的文件链接即可，行号不会漂移。\n")
+    md.append("三个平台包中的源文件逐字节相同（SHA-256 见各包 `SOURCE_MANIFEST.sha256`）。\n")
+    md.append("| 块 | 论文小节 | 内容 | 主要函数 / 宏 | 原文件行号 | 分块文件 |")
     md.append("|---|---|---|---|---|---|")
     for b in blocks:
         sym = b.get("symbols", "").replace("|", "\\|")
-        md.append("| %s | %s | %s | `%s` | L%d–L%d | [打开](%s) |"
-                  % (b["id"], b["paper"], b["title"], sym, b["start"], b["end"], url(b)))
+        md.append("| %s | %s | %s | `%s` | L%d–L%d | [`%s`](%s) |"
+                  % (b["id"], b["paper"], b["title"], sym, b["start"], b["end"], b["file"], url(b)))
     md.append("")
     md.append("## 纯文本链接（可直接粘进邮件或投稿系统）\n")
     md.append("```text")
-    md.append("%s" % base)
+    md.append(base)
     for b in blocks:
-        md.append("%s  %s  %s  L%d-L%d" % (b["id"], b["title"], url(b), b["start"], b["end"]))
+        md.append("%s  %-32s %s" % (b["id"], b["file"], url(b)))
+    md.append("%s#L1-L%d   （整份源文件）" % (core, meta["total_lines"]))
     md.append("```")
     md.append("")
     md.append("## 复现入口\n")
-    md.append("每个平台包都是自包含的，按 `README.md` 的“快速开始”一节解压后执行 "
+    md.append("每个平台包都是自包含的，按 `README.md` 的“快速开始”一节执行 "
               "`sudo bash ./run_on_target.sh` 即可重跑编译、正确性与计时。\n")
     with open(os.path.join(ROOT, "CODE_MAP.md"), "w", encoding="utf-8", newline="\n") as f:
         f.write("\n".join(md))
@@ -107,18 +111,19 @@ def main():
     tex.append("% 依赖 hyperref（论文已通过 \\url 使用）。")
     tex.append("\\begin{table}[htbp]")
     tex.append("\\centering")
-    tex.append("\\caption{核心多项式乘法的代码分块索引（\\texttt{crypto\\_core\\_multsntrup653.c}，共 %d 行）}"
+    tex.append("\\caption{核心多项式乘法的代码分块索引（源文件共 %d 行，块号对应 \\texttt{src/} 下的一个文件）}"
                % meta["total_lines"])
     tex.append("\\label{tab:code-map}")
-    tex.append("\\small")
-    tex.append("\\begin{tabular}{@{}llrl@{}}")
+    tex.append("\\footnotesize")
+    tex.append("\\begin{tabular}{@{}llp{4.25cm}p{2.95cm}l@{}}")
     tex.append("\\toprule")
-    tex.append("块 & 论文小节 & 行号 & 内容 \\\\")
+    tex.append("块 & 论文小节 & 内容 & 文件 & 行号 \\\\")
     tex.append("\\midrule")
     for b in blocks:
-        title = b["title"].replace("&", "\\&").replace("%", "\\%").replace("_", "\\_")
-        tex.append("%s & %s & \\href{%s}{L%d--L%d} & %s \\\\"
-                   % (b["id"], b["paper"].replace("§", "\\S"), url(b), b["start"], b["end"], title))
+        title = b["title"].replace("&", "\\&").replace("%", "\\%")
+        tex.append("%s & %s & \\raggedright %s & \\raggedright \\href{%s}{\\texttt{%s}} & L%d--L%d \\\\"
+                   % (b["id"], b["paper"].replace("§", "\\S"), title, url(b),
+                      tex_escape(b["file"]), b["start"], b["end"]))
     tex.append("\\bottomrule")
     tex.append("\\end{tabular}")
     tex.append("\\end{table}")
@@ -130,9 +135,9 @@ def main():
     avail.append("% 由 tools/make_links.py 生成：代码可用性段落，可直接粘进论文。")
     avail.append("本文实现、三个平台的交付包与全部评测脚本见")
     avail.append("\\url{%s}。" % base)
-    avail.append("核心多项式乘法位于各平台包的 \\texttt{optimized/} 目录（共 %d 行），"
-                 % meta["total_lines"])
-    avail.append("分块与行号的对应关系见表~\\ref{tab:code-map}。")
+    avail.append("核心多项式乘法共 %d 行，按算法层次切分为 %d 个分块文件，"
+                 % (meta["total_lines"], len(blocks)))
+    avail.append("逐块的行号与文件对应关系见表~\\ref{tab:code-map}。")
     avail.append("")
     with open(os.path.join(ROOT, "paper", "code_availability.tex"), "w", encoding="utf-8", newline="\n") as f:
         f.write("\n".join(avail))
