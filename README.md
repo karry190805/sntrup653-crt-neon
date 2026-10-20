@@ -14,7 +14,7 @@
 分块边界在 `tools/blocks.json`，完整索引见 `CODE_MAP.md`。链接固定到某个提交、指向整文件，例如：
 
 ```text
-https://github.com/karry190805/sntrup653-crt-neon/blob/b17bbf3/src/14_w16_kernel.c
+https://github.com/karry190805/sntrup653-crt-neon/blob/v1.0.0/src/14_w16_kernel.c
 ```
 
 ## 目录
@@ -29,7 +29,7 @@ tools/
   blocks.json                  分块定义
   split.py                     切分 + 自校验
   join.py                      还原校验
-  make_links.py                生成 CODE_MAP.md 与论文 LaTeX 片段
+  make_links.py                生成 CODE_MAP.md
 bench/                         三种平台的计时入口（测试程序在各包 shared/ 里）
 scripts/
   test.sh                      仓库自检
