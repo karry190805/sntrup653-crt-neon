@@ -16,9 +16,9 @@ bench/
 （各包的 `platform.conf` 给出该平台建议的核号）。
 
 ```bash
-PLATFORM=a76 CPU_PIN=6 bash bench/run_polymul.sh
-PLATFORM=a76 CPU_PIN=6 sudo -E bash bench/frequency.sh set
-PLATFORM=a76 CPU_PIN=6 bash bench/run_kem.sh
+PLATFORM=a76 CPU_PIN=6 sudo -E bash bench/frequency.sh set   # 先锁频
+PLATFORM=a76 CPU_PIN=6 bash bench/run_polymul.sh             # 表 1
+PLATFORM=a76 CPU_PIN=6 bash bench/run_kem.sh                 # 表 2
 PLATFORM=a76 CPU_PIN=6 sudo -E bash bench/frequency.sh restore
 ```
 
