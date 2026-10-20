@@ -36,9 +36,6 @@ scripts/
   gen_testcases.py             从 Python oracle 生成 testcases/
   check_testcases.py           校验 testcases/ 与 expected_oracle_hashes.txt
   testcases/*.in, *.out        12 组固定用例
-paper/
-  code_map.tex                 代码分块索引表（可直接 \input）
-  code_availability.tex        代码可用性段落
 CODE_MAP.md                    分块索引
 ```
 

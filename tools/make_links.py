@@ -1,10 +1,14 @@
 ﻿# -*- coding: utf-8 -*-
-"""生成核心代码分块索引（CODE_MAP.md）与论文用 LaTeX 片段。
+"""生成核心代码分块索引 CODE_MAP.md，这是仓库里唯一需要提交的产物。
 
 用法：
     python tools/make_links.py                     # 自动读 git remote / HEAD
     python tools/make_links.py --owner alice --repo sntrup653-crt-neon --ref <commit>
     python tools/make_links.py --ref main          # 用分支名（不推荐放进论文）
+
+加 --tex-dir DIR 可以另外生成论文用的 LaTeX 片段（索引表与代码可用性段落），
+写到 DIR 里而不写进仓库：
+    python tools/make_links.py --tex-dir ../论文片段
 
 链接指向 src/ 下的分块文件（整文件，行号不会漂移）。
 src/ 由 tools/split.py 从 packages/sntrup653-crt-cortex-a53/optimized/
@@ -54,6 +58,7 @@ def main():
     ap.add_argument("--owner")
     ap.add_argument("--repo")
     ap.add_argument("--ref")
+    ap.add_argument("--tex-dir", help="额外生成论文用 LaTeX 片段的目录（不写进仓库）")
     args = ap.parse_args()
 
     meta, blocks = load_blocks()
@@ -104,48 +109,50 @@ def main():
     with open(os.path.join(ROOT, "CODE_MAP.md"), "w", encoding="utf-8", newline="\n") as f:
         f.write("\n".join(md))
 
-    # ---------- LaTeX ----------
-    os.makedirs(os.path.join(ROOT, "paper"), exist_ok=True)
-    tex = []
-    tex.append("% 由 tools/make_links.py 生成，请勿手改。")
-    tex.append("% 依赖 hyperref（论文已通过 \\url 使用）。")
-    tex.append("\\begin{table}[htbp]")
-    tex.append("\\centering")
-    tex.append("\\caption{核心多项式乘法的代码分块索引（源文件共 %d 行，块号对应 \\texttt{src/} 下的一个文件）}"
-               % meta["total_lines"])
-    tex.append("\\label{tab:code-map}")
-    tex.append("\\footnotesize")
-    tex.append("\\begin{tabular}{@{}llp{4.25cm}p{2.95cm}l@{}}")
-    tex.append("\\toprule")
-    tex.append("块 & 论文小节 & 内容 & 文件 & 行号 \\\\")
-    tex.append("\\midrule")
-    for b in blocks:
-        title = b["title"].replace("&", "\\&").replace("%", "\\%")
-        tex.append("%s & %s & \\raggedright %s & \\raggedright \\href{%s}{\\texttt{%s}} & L%d--L%d \\\\"
-                   % (b["id"], b["paper"].replace("§", "\\S"), title, url(b),
-                      tex_escape(b["file"]), b["start"], b["end"]))
-    tex.append("\\bottomrule")
-    tex.append("\\end{tabular}")
-    tex.append("\\end{table}")
-    tex.append("")
-    with open(os.path.join(ROOT, "paper", "code_map.tex"), "w", encoding="utf-8", newline="\n") as f:
-        f.write("\n".join(tex))
+    # ---------- LaTeX（可选，写到仓库外） ----------
+    tex_dir = os.path.abspath(args.tex_dir) if args.tex_dir else None
+    if tex_dir:
+        os.makedirs(tex_dir, exist_ok=True)
+        tex = []
+        tex.append("% 由 tools/make_links.py 生成，请勿手改。")
+        tex.append("% 依赖 hyperref（论文已通过 \\url 使用）。")
+        tex.append("\\begin{table}[htbp]")
+        tex.append("\\centering")
+        tex.append("\\caption{核心多项式乘法的代码分块索引（源文件共 %d 行，块号对应 \\texttt{src/} 下的一个文件）}"
+                   % meta["total_lines"])
+        tex.append("\\label{tab:code-map}")
+        tex.append("\\footnotesize")
+        tex.append("\\begin{tabular}{@{}llp{4.25cm}p{2.95cm}l@{}}")
+        tex.append("\\toprule")
+        tex.append("块 & 论文小节 & 内容 & 文件 & 行号 \\\\")
+        tex.append("\\midrule")
+        for b in blocks:
+            title = b["title"].replace("&", "\\&").replace("%", "\\%")
+            tex.append("%s & %s & \\raggedright %s & \\raggedright \\href{%s}{\\texttt{%s}} & L%d--L%d \\\\"
+                       % (b["id"], b["paper"].replace("§", "\\S"), title, url(b),
+                          tex_escape(b["file"]), b["start"], b["end"]))
+        tex.append("\\bottomrule")
+        tex.append("\\end{tabular}")
+        tex.append("\\end{table}")
+        tex.append("")
+        with open(os.path.join(tex_dir, "code_map.tex"), "w", encoding="utf-8", newline="\n") as f:
+            f.write("\n".join(tex))
 
-    avail = []
-    avail.append("% 由 tools/make_links.py 生成：代码可用性段落，可直接粘进论文。")
-    avail.append("本文实现、三个平台的交付包与全部评测脚本见")
-    avail.append("\\url{%s}。" % base)
-    avail.append("核心多项式乘法共 %d 行，按算法层次切分为 %d 个分块文件，"
-                 % (meta["total_lines"], len(blocks)))
-    avail.append("逐块的行号与文件对应关系见表~\\ref{tab:code-map}。")
-    avail.append("")
-    with open(os.path.join(ROOT, "paper", "code_availability.tex"), "w", encoding="utf-8", newline="\n") as f:
-        f.write("\n".join(avail))
+        avail = []
+        avail.append("% 由 tools/make_links.py 生成：代码可用性段落，可直接粘进论文。")
+        avail.append("本文实现、三个平台的交付包与全部评测脚本见")
+        avail.append("\\url{%s}。" % base)
+        avail.append("核心多项式乘法共 %d 行，按算法层次切分为 %d 个分块文件，"
+                     % (meta["total_lines"], len(blocks)))
+        avail.append("逐块的行号与文件对应关系见表~\\ref{tab:code-map}。")
+        avail.append("")
+        with open(os.path.join(tex_dir, "code_availability.tex"), "w", encoding="utf-8", newline="\n") as f:
+            f.write("\n".join(avail))
 
     print("owner/repo : %s/%s" % (owner, repo))
     print("ref        : %s" % ref)
     print("blocks     : %d  (lines %d..%d)" % (len(blocks), blocks[0]["start"], blocks[-1]["end"]))
-    print("wrote      : CODE_MAP.md, paper/code_map.tex, paper/code_availability.tex")
+    print("wrote      : CODE_MAP.md" + (", %s" % tex_dir if tex_dir else " (未生成 LaTeX；需要时加 --tex-dir)"))
 
 
 if __name__ == "__main__":
