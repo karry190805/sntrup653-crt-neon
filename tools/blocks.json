@@ -15,7 +15,7 @@
     {"id": "B10", "start": 588, "title": "11 点/7 点成对 DFT（四通道）", "paper": "§3.3", "symbols": "dft11_pairwise_4lane、dft11_pairwise_pruned_4lane、dft7_pairwise_4lane"},
     {"id": "B11", "start": 701, "title": "第一层编译期特化（公开零裁剪）", "paper": "§3.3 §4.3", "symbols": "SNTRUP_L1_LOAD、SNTRUP_L1_DC、SNTRUP_L1_TERM、SNTRUP_L1_K、SNTRUP_L1_ROW"},
     {"id": "B12", "start": 817, "title": "NEON 版 77 点变换主循环", "paper": "§3.3", "symbols": "good_thomas_77_ntt_zs_neon"},
-    {"id": "B13", "start": 899, "title": "十六维加权卷积助手与 TMVP8 累加", "paper": "§3.4", "symbols": "weighted_mul16_scalar、w16_reduce_s32_pair、w16_mul_const、w16_add_mod、w16_sub_mod、w16_tmvp8_mla、w16_weighted_tmvp8"},
+    {"id": "B13", "start": 899, "title": "十六维加权卷积：标量参考与 NEON 助手", "paper": "§3.4", "symbols": "weighted_mul16_scalar、w16_reduce_s32_pair、w16_mul_const、w16_add_mod、w16_sub_mod、w16_tmvp8_mla、w16_weighted_tmvp8"},
     {"id": "B14", "start": 984, "title": "双 8 维 NTT + TMVP8 加权卷积主核", "paper": "§3.4", "symbols": "weighted_mul16_2ntt_tmvp8_neon、weighted_mul16"},
     {"id": "B15", "start": 1026, "title": "系数索引与四通道点积", "paper": "§3.5", "symbols": "main_coeff、D_idx、dot_i16_neon_4lane"},
     {"id": "B16", "start": 1060, "title": "低位分支（73 项截断卷积）", "paper": "§3.5", "symbols": "low_part73_scalar、low_part73_neon"},
