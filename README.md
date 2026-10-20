@@ -18,25 +18,16 @@
 ## 目录
 
 ```text
-packages/
-  sntrup653-crt-cortex-a53/    Cortex-A53 交付包（KICKPI K2B，Allwinner H618）
-  sntrup653-crt-cortex-a76/    Cortex-A76 交付包（Radxa ROCK 5B+，RK3588）
-  sntrup653-crt-cortex-x1c/    Cortex-X1C 交付包（Radxa Dragon Q8B，Snapdragon 8cx Gen 3）
-src/                           分块视图 B01–B19（由 split.py 生成，勿手改）
-tools/
-  blocks.json                  分块定义
-  split.py                     切分 + 自校验
-  join.py                      还原校验
-  make_links.py                生成 CODE_MAP.md
-bench/                         三个平台的计时脚本（测试程序在各包 shared/ 里）
-scripts/
-  test.sh                      仓库自检
-  gen_testcases.py             从 Python oracle 生成 testcases/
-  check_testcases.py           校验 testcases/ 与 expected_oracle_hashes.txt
-  testcases/*.in, *.out        12 组固定用例
-results/                       三个平台的测量输出，含逐轮原始数据（表 1、表 2 的来源）
-CODE_MAP.md                    分块索引
+packages/    三个平台的交付包（Cortex-A53 / A76 / X1C），各自自包含
+src/         分块视图 B01–B19（由 split.py 生成，勿手改）
+tools/       分块定义与切分、还原、索引脚本
+bench/       三个平台的计时脚本（测试程序在各包 shared/ 里）
+scripts/     自检脚本与固定测例
+results/     三个平台的测量输出，含逐轮原始数据（表 1、表 2 的来源）
+CODE_MAP.md  分块索引
 ```
+
+三个平台分别是 KICKPI K2B（Allwinner H618）、Radxa ROCK 5B+（RK3588）和 Radxa Dragon Q8B（Snapdragon 8cx Gen 3）。
 
 每个交付包内部结构一致：
 
