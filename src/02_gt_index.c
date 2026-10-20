@@ -1,4 +1,4 @@
-/* B02 Good–Thomas 索引与公开零位模式
+/* B02 Good–Thomas 索引与公开补零模式
  *
  * crypto_core_multsntrup653.c 第 68–104 行，共 37 行。
  * 分块视图，不单独编译；去掉本注释后按 B01–B19 顺序拼接即为原文件，

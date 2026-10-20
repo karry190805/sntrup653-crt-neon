@@ -43,7 +43,7 @@ CODE_MAP.md                    分块索引
 每个交付包内部结构一致：
 
 ```text
-optimized/     本文实现（NEON 版多项式乘法 + KEM 胶合层）
+optimized/     本文实现（NEON 多项式乘法与 KEM 接口层）
 baseline/      PQClean Round 3 的 sntrup653 纯 C 实现（对照基线）
 shared/        计时、正确性、端到端测试与自检程序
 *.sh, *.py     构建、运行、检查与汇总脚本
