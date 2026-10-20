@@ -101,6 +101,7 @@ def main():
         f.write("\n".join(md))
 
     # ---------- LaTeX ----------
+    os.makedirs(os.path.join(ROOT, "paper"), exist_ok=True)
     tex = []
     tex.append("% 由 tools/make_links.py 生成，请勿手改。")
     tex.append("% 依赖 hyperref（论文已通过 \\url 使用）。")
