@@ -1,5 +1,7 @@
 # sntrup653-crt-neon
 
+[![selftest](https://github.com/karry190805/sntrup653-crt-neon/actions/workflows/selftest.yml/badge.svg)](https://github.com/karry190805/sntrup653-crt-neon/actions/workflows/selftest.yml)
+
 面向 sntrup653 的单项式因子 CRT 多项式乘法及 AArch64 NEON 实现。本仓库是论文的配套代码，包含三个平台（Cortex-A53 / A76 / X1C）的自包含交付包，以及按算法层次切开的代码分块视图。
 
 ## 两种视角，同一份代码

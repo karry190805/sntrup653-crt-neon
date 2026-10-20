@@ -65,15 +65,10 @@ def main():
 
     md = []
     md.append("# 核心代码分块索引\n")
-    md.append("仓库里同一份核心实现有两种视角：\n")
-    md.append("- **可编译、被测评的那一份**：`%s`（%d 行）" % (meta["canonical_path"], meta["total_lines"]))
-    md.append("- **按算法层次切开的阅读视图**：`%s/` 下的 %d 个文件（B01–B%02d）"
-              % (meta["view_dir"], len(blocks), len(blocks)))
-    md.append("")
-    md.append("`src/` 由 `tools/split.py` 从上面那份源文件原样切分（只在每块前加注释头，不改代码），"
-              "`tools/join.py` 去掉注释头后拼接并比对 SHA-256，可复现原文件。"
-              "所以引用某个块时用 `src/` 的文件链接即可，行号不会漂移。\n")
-    md.append("三个平台包中的源文件逐字节相同（SHA-256 见各包 `SOURCE_MANIFEST.sha256`）。\n")
+    md.append("源文件 `%s`（%d 行）按算法层次切分为 %d 块，`%s/` 下每块一个文件。"
+              "切分只加注释头、不改代码，`tools/join.py` 去掉注释头即可拼回并比对 SHA-256；"
+              "引用用整文件链接，行号不会漂移。三个平台包中的源文件逐字节相同。\n"
+              % (meta["canonical_path"], meta["total_lines"], len(blocks), meta["view_dir"]))
     md.append("| 块 | 论文小节 | 内容 | 主要函数 / 宏 | 原文件行号 | 分块文件 |")
     md.append("|---|---|---|---|---|---|")
     for b in blocks:

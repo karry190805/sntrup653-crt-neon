@@ -1,13 +1,6 @@
 # 核心代码分块索引
 
-仓库里同一份核心实现有两种视角：
-
-- **可编译、被测评的那一份**：`packages/sntrup653-crt-cortex-a53/optimized/crypto_core_multsntrup653.c`（1434 行）
-- **按算法层次切开的阅读视图**：`src/` 下的 19 个文件（B01–B19）
-
-`src/` 由 `tools/split.py` 从上面那份源文件原样切分（只在每块前加注释头，不改代码），`tools/join.py` 去掉注释头后拼接并比对 SHA-256，可复现原文件。所以引用某个块时用 `src/` 的文件链接即可，行号不会漂移。
-
-三个平台包中的源文件逐字节相同（SHA-256 见各包 `SOURCE_MANIFEST.sha256`）。
+源文件 `packages/sntrup653-crt-cortex-a53/optimized/crypto_core_multsntrup653.c`（1434 行）按算法层次切分为 19 块，`src/` 下每块一个文件。切分只加注释头、不改代码，`tools/join.py` 去掉注释头即可拼回并比对 SHA-256；引用用整文件链接，行号不会漂移。三个平台包中的源文件逐字节相同。
 
 | 块 | 论文小节 | 内容 | 主要函数 / 宏 | 原文件行号 | 分块文件 |
 |---|---|---|---|---|---|
