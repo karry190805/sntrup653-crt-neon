@@ -6,8 +6,7 @@
 2. 重放 12 个 fixed + 3*653 个 axis 用例，与 expected_oracle_hashes.txt 的
    cases 数和 FNV-1a-64 比对（C 侧 shared/test_endtoend_oracle.c 输出同一个哈希）。
 
-只需要 python3，不依赖 ARM 硬件；C 侧的实机核对仍由各包的
-check_oracle_hash.py 在板卡上完成。
+只需要 python3，不需要 ARM 硬件。
 
 用法：
     python scripts/check_testcases.py

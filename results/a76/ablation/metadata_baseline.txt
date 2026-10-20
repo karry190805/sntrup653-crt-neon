@@ -1,0 +1,3 @@
+arm=baseline
+note=reference PQClean core; the optimization switches do not apply
+core_sha256=f3cd4059d95cbacc5464d31200b5e0c54d91df478fada9109210ccbcc96e899f

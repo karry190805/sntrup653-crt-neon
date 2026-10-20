@@ -36,6 +36,7 @@ scripts/
   gen_testcases.py             从 Python oracle 生成 testcases/
   check_testcases.py           校验 testcases/ 与 expected_oracle_hashes.txt
   testcases/*.in, *.out        12 组固定用例
+results/                       三个平台的测量输出（表 1、表 2 的来源）
 CODE_MAP.md                    分块索引
 ```
 
@@ -85,6 +86,8 @@ target_campaign=PASS
 | Cortex-X1C | 0.05099 | 0.01494 | 3.41× |
 
 KEM 端到端（一次密钥生成 + 封装 + 解封装，论文表 2）：1.06×（A53）、1.04×（A76）、1.07×（X1C）。各项的 95% 置信区间与逐阶段数据见论文。
+
+逐轮原始数据、五组会话复测和消融结果在 `results/`，文件与表格的对应关系见 `results/README.md`。
 
 ## 计时
 

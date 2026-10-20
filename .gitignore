@@ -7,7 +7,7 @@ build/
 bin/
 
 # run outputs from the on-target scripts
-results/
+packages/*/results/
 run_*/
 *.log
 *.json.tmp

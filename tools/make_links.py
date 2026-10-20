@@ -9,10 +9,6 @@
 加 --tex-dir DIR 可以另外生成论文用的 LaTeX 片段（索引表与代码可用性段落），
 写到 DIR 里而不写进仓库：
     python tools/make_links.py --tex-dir ../论文片段
-
-链接指向 src/ 下的分块文件（整文件，行号不会漂移）。
-src/ 由 tools/split.py 从 packages/sntrup653-crt-cortex-a53/optimized/
-crypto_core_multsntrup653.c 原样切分生成，tools/join.py 可校验还原一致。
 """
 import argparse
 import json

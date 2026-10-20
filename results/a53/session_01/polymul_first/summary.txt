@@ -1,0 +1,13 @@
+summary_csv=/home/kickpi/code/sntrup-a53.OJguE8/sntrup653-crt-cortex-a53/run_20261017T055830Z_iEPYsZ/results/session_01/polymul_first/summary.csv
+==============================================================================
+POLYMUL: raw summary (ms)
+==============================================================================
+implementation,metric,n,mean,median,p95,min,max
+baseline,ms_per_call,200,0.339197153,0.339169052,0.339364921,0.339102146,0.339578084
+optimized,ms_per_call,200,0.092255657,0.092258625,0.092399323,0.092180980,0.092595271
+==============================================================================
+POLYMUL: speedup = mean(baseline) / mean(optimized); >1 means the CRT core wins
+==============================================================================
+metric,mean_baseline,mean_optimized,speedup,ci95_low,ci95_high,p_value,rounds_faster/compared,verdict
+ms_per_call,0.339197153,0.092255657,3.676708430,3.676035997,3.677335200,0,200/200,POSITIVE
+verdicts=polymul=POSITIVE

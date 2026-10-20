@@ -1,0 +1,22 @@
+generated_at_utc=2026-10-17T07:29:35Z
+cc=/usr/bin/gcc
+package_revision=release-20261014
+core_sha256=37fb5e97dcd2b5360d651bfe4bdd21e79a6e8e71aa479020d67a4ee986f46919
+cflags=-O3 -std=gnu11 -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -Wall -Wextra -mcpu=cortex-a53 -mtune=cortex-a53 -fomit-frame-pointer -fno-lto
+portable_sanity=0
+cross_build=0
+CPU_TARGET=cortex-a53
+CPU_MODEL=Cortex-A53
+CPU_PART=0xd03
+use_lto=0
+config_id=inplace0-zs1-w16-radix2-2xtmvp8-low1-fold1-barrett1
+sntrup653_use_inplace_buffers=0
+sntrup653_public_zs_mode=1
+sntrup653_low73_neon=1
+sntrup653_final_fold_neon=1
+use_barrett_reduce=1
+gcc (Debian 14.2.0-19) 14.2.0
+Copyright (C) 2024 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+

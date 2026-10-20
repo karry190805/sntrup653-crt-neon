@@ -1,0 +1,13 @@
+summary_csv=/home/rock/code/sntrup653-crt-cortex-a76/run_20261017T055653Z_mYX8Vg/results/polymul_ab/summary.csv
+==============================================================================
+POLYMUL: raw summary (ms)
+==============================================================================
+implementation,metric,n,mean,median,p95,min,max
+baseline,ms_per_call,200,0.080555838,0.080580646,0.080946936,0.079899021,0.081360563
+optimized,ms_per_call,200,0.030696672,0.030697261,0.030704916,0.030685958,0.030707833
+==============================================================================
+POLYMUL: speedup = mean(baseline) / mean(optimized); >1 means the CRT core wins
+==============================================================================
+metric,mean_baseline,mean_optimized,speedup,ci95_low,ci95_high,p_value,rounds_faster/compared,verdict
+ms_per_call,0.080555838,0.030696672,2.624253150,2.621576875,2.626872732,0,200/200,POSITIVE
+verdicts=polymul=POSITIVE

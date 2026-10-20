@@ -1,0 +1,7 @@
+functional_equivalence=PASS
+wallclock_session=PASS
+pmu=NOT_RUN
+session_id=20261017T060253Z
+session_seed=20260901
+design=ABBA_FIRST
+result_root=/home/rock/code/sntrup653-crt-cortex-a76/run_20261017T055653Z_mYX8Vg/results/session_01

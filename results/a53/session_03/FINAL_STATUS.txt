@@ -1,0 +1,7 @@
+functional_equivalence=PASS
+wallclock_session=PASS
+pmu=NOT_RUN
+session_id=20261017T064818Z
+session_seed=20260903
+design=ABBA_FIRST
+result_root=/home/kickpi/code/sntrup-a53.OJguE8/sntrup653-crt-cortex-a53/run_20261017T055830Z_iEPYsZ/results/session_03
