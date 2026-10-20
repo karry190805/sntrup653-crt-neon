@@ -32,6 +32,12 @@ tools/
   split.py                     切分 + 自校验
   join.py                      还原校验
   make_links.py                生成 CODE_MAP.md 与论文 LaTeX 片段
+bench/                         三种平台的计时入口（测试程序在各包 shared/ 里）
+scripts/
+  test.sh                      仓库自检（分块还原 + 固定测例 + 哈希序列）
+  gen_testcases.py             从 Python oracle 生成 testcases/
+  check_testcases.py           校验 testcases/ 与 expected_oracle_hashes.txt
+  testcases/*.in, *.out        12 组固定用例
 paper/
   code_map.tex                 代码分块索引表（可直接 \input）
   code_availability.tex        代码可用性段落
@@ -102,6 +108,27 @@ git commit -am "pin code links" && git push
 ```
 
 分块边界只在 `tools/blocks.json` 里维护，改完依次跑 `split.py`、`make_links.py` 即可。
+
+## 仓库自检
+
+只需 python3，任何机器都能跑：
+
+```bash
+bash scripts/test.sh
+```
+
+它校验两件事：`src/` 的 19 个分块文件去掉注释头后能否还原出源文件（SHA-256 一致），以及 `scripts/testcases/` 的 12 组固定用例与 1971 个用例的哈希序列是否与交付包里的纯 Python oracle 一致。板卡上的 C 侧核对仍由各包的 `check_oracle_hash.py` 完成。
+
+## 计时
+
+```bash
+PLATFORM=a76 CPU_PIN=6 sudo -E bash bench/frequency.sh set   # 锁定频率
+PLATFORM=a76 CPU_PIN=6 bash bench/run_polymul.sh             # 表 1
+PLATFORM=a76 CPU_PIN=6 bash bench/run_kem.sh                 # 表 2
+bash bench/frequency.sh restore
+```
+
+协议（预热、轮数、配对顺序、绑核）与逐平台数字见 `bench/README.md`。QEMU 下的时间数字没有意义，计时必须在目标板卡上跑。
 
 ## 验证状态与边界
 
