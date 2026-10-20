@@ -15,17 +15,15 @@ import os
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
-MARK = b"/* ==== SPLIT:HEADER END ==== */\n"
+MARK = "/* 以上为视图注释，以下为原文件内容 */\n".encode("utf-8")
 
 HEADER = """\
-/* ---------------------------------------------------------------------------
- * {bid}  {title}  —— 论文 {paper}
- * 源文件第 {start}--{end} 行（共 {n} 行）
+/* {bid} {title}
  *
- * 本文件是 crypto_core_multsntrup653.c 的分块视图，由 tools/split.py 原样切分
- * 生成，不是独立编译单元。按 B01…B{last:02d} 顺序去掉本注释头后拼接即得原文件，
- * 可用 tools/join.py 校验 SHA-256。
- * ------------------------------------------------------------------------- */
+ * crypto_core_multsntrup653.c 第 {start}–{end} 行，共 {n} 行。
+ * 分块视图，不单独编译；去掉本注释后按 B01–B{last:02d} 顺序拼接即为原文件，
+ * tools/join.py 可校验 SHA-256。
+ */
 """
 
 

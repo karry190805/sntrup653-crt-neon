@@ -1,12 +1,10 @@
-/* ---------------------------------------------------------------------------
- * B13  十六维加权卷积：标量参考与 NEON 助手  —— 论文 §3.4
- * 源文件第 899--983 行（共 85 行）
+/* B13 十六维加权卷积：标量参考与 NEON 助手
  *
- * 本文件是 crypto_core_multsntrup653.c 的分块视图，由 tools/split.py 原样切分
- * 生成，不是独立编译单元。按 B01…B19 顺序去掉本注释头后拼接即得原文件，
- * 可用 tools/join.py 校验 SHA-256。
- * ------------------------------------------------------------------------- */
-/* ==== SPLIT:HEADER END ==== */
+ * crypto_core_multsntrup653.c 第 899–983 行，共 85 行。
+ * 分块视图，不单独编译；去掉本注释后按 B01–B19 顺序拼接即为原文件，
+ * tools/join.py 可校验 SHA-256。
+ */
+/* 以上为视图注释，以下为原文件内容 */
 #ifdef SNTRUP653_INTERNAL_TEST_HOOKS
 /* Independent schoolbook oracle; never selected by the production entry point. */
 static void weighted_mul16_scalar(int out[BS], const int a[BS], const int b[BS], int lambda) {

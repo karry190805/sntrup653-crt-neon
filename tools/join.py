@@ -10,7 +10,7 @@ import os
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
-MARK = b"/* ==== SPLIT:HEADER END ==== */\n"
+MARK = "/* 以上为视图注释，以下为原文件内容 */\n".encode("utf-8")
 
 
 def main():

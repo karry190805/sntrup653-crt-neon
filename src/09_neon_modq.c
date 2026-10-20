@@ -1,12 +1,10 @@
-/* ---------------------------------------------------------------------------
- * B09  NEON 约减与存储助手  —— 论文 §2.5 §3.3
- * 源文件第 527--587 行（共 61 行）
+/* B09 NEON 约减与存储助手
  *
- * 本文件是 crypto_core_multsntrup653.c 的分块视图，由 tools/split.py 原样切分
- * 生成，不是独立编译单元。按 B01…B19 顺序去掉本注释头后拼接即得原文件，
- * 可用 tools/join.py 校验 SHA-256。
- * ------------------------------------------------------------------------- */
-/* ==== SPLIT:HEADER END ==== */
+ * crypto_core_multsntrup653.c 第 527–587 行，共 61 行。
+ * 分块视图，不单独编译；去掉本注释后按 B01–B19 顺序拼接即为原文件，
+ * tools/join.py 可校验 SHA-256。
+ */
+/* 以上为视图注释，以下为原文件内容 */
 #if defined(__ARM_NEON) || defined(__ARM_NEON__)
 static inline uint32x4_t vmod_q_u32_barrett(uint32x4_t x) {
 #if USE_BARRETT_REDUCE

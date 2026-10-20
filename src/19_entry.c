@@ -1,12 +1,10 @@
-/* ---------------------------------------------------------------------------
- * B19  对外入口  —— 论文 §3 §4.1
- * 源文件第 1387--1434 行（共 48 行）
+/* B19 对外入口
  *
- * 本文件是 crypto_core_multsntrup653.c 的分块视图，由 tools/split.py 原样切分
- * 生成，不是独立编译单元。按 B01…B19 顺序去掉本注释头后拼接即得原文件，
- * 可用 tools/join.py 校验 SHA-256。
- * ------------------------------------------------------------------------- */
-/* ==== SPLIT:HEADER END ==== */
+ * crypto_core_multsntrup653.c 第 1387–1434 行，共 48 行。
+ * 分块视图，不单独编译；去掉本注释后按 B01–B19 顺序拼接即为原文件，
+ * tools/join.py 可校验 SHA-256。
+ */
+/* 以上为视图注释，以下为原文件内容 */
 int PQCLEAN_SNTRUP653_CLEAN_crypto_core_multsntrup653(unsigned char *outbytes, const unsigned char *inbytes, const unsigned char *kbytes) {
     Fq f[p], out[p];
     small g[p];

@@ -1,12 +1,10 @@
-/* ---------------------------------------------------------------------------
- * B17  最终折回与中心化  —— 论文 §3.5
- * 源文件第 1087--1158 行（共 72 行）
+/* B17 最终折回与中心化
  *
- * 本文件是 crypto_core_multsntrup653.c 的分块视图，由 tools/split.py 原样切分
- * 生成，不是独立编译单元。按 B01…B19 顺序去掉本注释头后拼接即得原文件，
- * 可用 tools/join.py 校验 SHA-256。
- * ------------------------------------------------------------------------- */
-/* ==== SPLIT:HEADER END ==== */
+ * crypto_core_multsntrup653.c 第 1087–1158 行，共 72 行。
+ * 分块视图，不单独编译；去掉本注释后按 B01–B19 顺序拼接即为原文件，
+ * tools/join.py 可校验 SHA-256。
+ */
+/* 以上为视图注释，以下为原文件内容 */
 static SNTRUP_MAYBE_UNUSED void final_folding_scalar(Fq out[p], const Blocks77 Cblk, const int clow[LOW_N]) {
     int kk;
     {

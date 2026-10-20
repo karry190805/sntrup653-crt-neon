@@ -1,12 +1,10 @@
-/* ---------------------------------------------------------------------------
- * B12  NEON 版 77 点变换主循环  —— 论文 §3.3
- * 源文件第 817--898 行（共 82 行）
+/* B12 NEON 版 77 点变换主循环
  *
- * 本文件是 crypto_core_multsntrup653.c 的分块视图，由 tools/split.py 原样切分
- * 生成，不是独立编译单元。按 B01…B19 顺序去掉本注释头后拼接即得原文件，
- * 可用 tools/join.py 校验 SHA-256。
- * ------------------------------------------------------------------------- */
-/* ==== SPLIT:HEADER END ==== */
+ * crypto_core_multsntrup653.c 第 817–898 行，共 82 行。
+ * 分块视图，不单独编译；去掉本注释后按 B01–B19 顺序拼接即为原文件，
+ * tools/join.py 可校验 SHA-256。
+ */
+/* 以上为视图注释，以下为原文件内容 */
 static void good_thomas_77_ntt_zs_neon(Blocks77 out, const Blocks77 in, int invert, int public_zs_forward) {
 #if defined(__ARM_NEON) || defined(__ARM_NEON__)
     const int (*P7P)[4] = invert ? PAIR7_P_I : PAIR7_P_F;
