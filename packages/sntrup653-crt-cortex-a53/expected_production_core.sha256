@@ -1,0 +1,6 @@
+# expected_production_core.sha256
+# sha256 of optimized/crypto_core_multsntrup653.c with every
+# SNTRUP653_INTERNAL_TEST_HOOKS conditional removed, i.e. what the
+# production translation unit contains.
+# Regenerate with: python3 check_selftest_isolation.py --write
+production_view_sha256=9749385416ba3e53bf1fe81be01f5becb6a74ea723b60e100fcfd5910faabad4
