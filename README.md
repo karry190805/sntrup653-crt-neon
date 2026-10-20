@@ -7,11 +7,13 @@
 | 用途 | 位置 |
 |---|---|
 | 编译、复现表 1 与表 2 | `packages/sntrup653-crt-cortex-a53/optimized/crypto_core_multsntrup653.c`（1434 行；A76、X1C 两个包内为同名文件，三份逐字节一致） |
-| 阅读、在论文里引用 | `src/01_params.c` … `src/19_entry.c`（19 个文件，按算法层次切分，与论文小节对应关系见 [`CODE_MAP.md`](CODE_MAP.md)） |
+| 阅读、在论文里引用 | `src/01_params.c` … `src/19_entry.c`（19 个文件，与论文小节的对应见 [`CODE_MAP.md`](CODE_MAP.md)） |
 
 `src/` 是上面那份源文件的逐字节切分，只在每块前加一段注释头；`tools/join.py` 去掉注释头拼回原文件并比对 SHA-256。分块不做成独立编译单元，拆分会改变内联与代码布局，表 1、表 2 就不再对应仓库里的代码。
 
-分块边界在 `tools/blocks.json`，完整索引见 [`CODE_MAP.md`](CODE_MAP.md)。引用时用发布标签下的整文件链接，行号不会漂移，例如 [`src/14_w16_kernel.c`](https://github.com/karry190805/sntrup653-crt-neon/blob/v1.0.0/src/14_w16_kernel.c)。`CODE_MAP.md` 末节给出同一批链接的纯文本形式，可直接粘进投稿系统。
+引用时用发布标签下的整文件链接，行号不会漂移，例如 [`src/14_w16_kernel.c`](https://github.com/karry190805/sntrup653-crt-neon/blob/v1.0.0/src/14_w16_kernel.c)。分块边界在 `tools/blocks.json`。
+
+没有 ARM 板卡时，`bash scripts/test.sh` 在任意机器上校验分块能否还原、12 组固定测例与 1971 个用例的哈希序列，只需要 python3，细节见 [`scripts/README.md`](scripts/README.md)。
 
 ## 目录
 
@@ -32,7 +34,7 @@ scripts/
   gen_testcases.py             从 Python oracle 生成 testcases/
   check_testcases.py           校验 testcases/ 与 expected_oracle_hashes.txt
   testcases/*.in, *.out        12 组固定用例
-results/                       三个平台的测量输出（表 1、表 2 的来源）
+results/                       三个平台的测量输出，含逐轮原始数据（表 1、表 2 的来源）
 CODE_MAP.md                    分块索引
 ```
 
@@ -48,14 +50,14 @@ VERIFICATION.md / RANGE_AND_SECURITY.md / LOCAL_VALIDATION.md   验证与适用�
 
 ## 快速开始
 
-在 ARM64 Linux 上（以 A76 为例，其余两个平台把目录名换掉即可）：
+在 ARM64 Linux 上，以 A76 为例，其余两个平台换目录名即可：
 
 ```bash
 cd packages/sntrup653-crt-cortex-a76
 sudo bash ./run_on_target.sh
 ```
 
-依赖（未安装过时执行一次）：
+需要 root：脚本要锁定频率并绑定测量核。依赖（未安装过时执行一次）：
 
 ```bash
 sudo apt-get update && sudo apt-get install -y --no-install-recommends \
@@ -75,11 +77,11 @@ target_campaign=PASS
 
 多项式乘法单次调用（论文表 1，单核、锁频）：
 
-| 平台 | 基线/ms | 优化/ms | 加速比 |
-|---|---|---|---|
-| Cortex-A53 | 0.33915 | 0.09225 | 3.68× |
-| Cortex-A76 | 0.08056 | 0.03070 | 2.62× |
-| Cortex-X1C | 0.05099 | 0.01494 | 3.41× |
+| 平台 | 编译器 | 基线/ms | 优化/ms | 加速比 |
+|---|---|---|---|---|
+| Cortex-A53 | GCC 14.2.0 | 0.33915 | 0.09225 | 3.68× |
+| Cortex-A76 | GCC 12.2.0 | 0.08056 | 0.03070 | 2.62× |
+| Cortex-X1C | GCC 15.2.0 | 0.05099 | 0.01494 | 3.41× |
 
 KEM 端到端（一次密钥生成 + 封装 + 解封装，论文表 2，单核、锁频）：1.06×（A53）、1.04×（A76）、1.07×（X1C）。各项的 95% 置信区间与逐阶段数据见论文。
 
@@ -95,14 +97,6 @@ bash bench/frequency.sh restore
 ```
 
 协议与逐平台数字见 [`bench/README.md`](bench/README.md)。
-
-## 仓库自检
-
-```bash
-bash scripts/test.sh
-```
-
-只需要 python3，校验分块能否还原、固定测例与 1971 个用例的哈希序列是否与包内 Python oracle 一致。细节见 [`scripts/README.md`](scripts/README.md)。
 
 ## 验证状态与边界
 
