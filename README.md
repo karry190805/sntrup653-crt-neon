@@ -64,6 +64,8 @@ multicompiler=PASS compilers=2 combos=10 unique_hashes=1
 target_campaign=PASS
 ```
 
+包内 `SOURCE_MANIFEST.sha256` 覆盖全部文件，进入包目录执行 `sha256sum -c SOURCE_MANIFEST.sha256` 可确认交付内容未被改动。
+
 ## 结果
 
 多项式乘法单次调用（论文表 1，单核、锁频）：

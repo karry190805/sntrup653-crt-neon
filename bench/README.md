@@ -42,12 +42,15 @@ bash bench/frequency.sh restore
 
 ## 输出
 
-结果落在包内的 `results/` 下，每次运行一个带时间戳的目录：
+结果落在包内的 `results/` 下，每次运行一个目录：
 
 ```text
-results/polymul_baseline_optimized_optimized_baseline_2026xxxxTxxxxxxZ/
-  summary.csv  summary.txt  raw/*.txt
-results/kem_.../  sessions_.../  ablation_.../
+results/
+  polymul_<tag>_<stamp>/    summary.csv  summary.txt  <n>_<impl>_raw.csv  build_metadata.txt
+  kem_<tag>_<stamp>/        同上
+  session_01 .. session_05/ 每个会话一组的 summary.csv、summary.txt
+  summary_sessions.csv|txt  五组会话的聚合
+  ablation_<stamp>/         summary.csv、summary.txt 与各变体的原始 CSV
 ```
 
 `packages/<平台>/summarize.py` 把 `results/` 汇总成论文用的表格。
@@ -56,7 +59,7 @@ results/kem_.../  sessions_.../  ablation_.../
 
 多项式乘法单次调用（论文表 1，GCC 14.2.0 / 12.2.0 / 15.2.0 对应 A53 / A76 / X1C，`-O3`）：
 
-| 平台 | 基线/ms | 优化/ms | 加速比/倍 | 95% 置信区间 |
+| 平台 | 基线/ms | 优化/ms | 加速比（倍） | 95% 置信区间 |
 |---|---|---|---|---|
 | Cortex-A53 | 0.33915 | 0.09225 | 3.67631 | [3.67499, 3.67772] |
 | Cortex-A76 | 0.08056 | 0.03070 | 2.62425 | [2.62158, 2.62687] |
@@ -64,7 +67,7 @@ results/kem_.../  sessions_.../  ablation_.../
 
 KEM 各阶段（论文表 2）：
 
-| 平台 | 阶段 | 基线/ms | 优化/ms | 加速比/倍 |
+| 平台 | 阶段 | 基线/ms | 优化/ms | 加速比（倍） |
 |---|---|---|---|---|
 | Cortex-A53 | 密钥生成 | 15.43536 | 15.19371 | 1.01590 |
 | | 封装 | 0.53999 | 0.29371 | 1.83851 |
