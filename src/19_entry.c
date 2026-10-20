@@ -1,6 +1,6 @@
 /* B19 对外接口函数
  *
- * crypto_core_multsntrup653.c 第 1387–1434 行，共 48 行。
+ * crypto_core_multsntrup653.c 第 1387–1433 行，共 47 行。
  * 分块视图，不单独编译；去掉本注释后按 B01–B19 顺序拼接即为原文件，
  * tools/join.py 可校验 SHA-256。
  */

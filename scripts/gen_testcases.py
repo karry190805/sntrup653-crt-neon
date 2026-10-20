@@ -6,8 +6,8 @@
     out   = f*g 的 653 个中心化系数
 
 用法：
-    python tools/../scripts/gen_testcases.py        # 重新生成 scripts/testcases/
-    python scripts/check_testcases.py               # 校验（任何机器都能跑）
+    python3 scripts/gen_testcases.py               # 重新生成 scripts/testcases/
+    python3 scripts/check_testcases.py             # 校验（任何机器都能跑）
 """
 import importlib.util
 import os

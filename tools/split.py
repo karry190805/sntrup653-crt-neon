@@ -5,8 +5,8 @@
 生成后去掉注释头重新拼接，与原文件比对 SHA-256。
 
 用法：
-    python tools/split.py            # 切分 + 校验
-    python tools/split.py --check    # 只校验现有 src/
+    python3 tools/split.py            # 切分 + 校验
+    python3 tools/split.py --check    # 只校验现有 src/
 """
 import argparse
 import hashlib
@@ -46,6 +46,9 @@ def main():
     view_dir = os.path.join(ROOT, meta["view_dir"])
     raw = open(src_path, "rb").read()
     lines = raw.split(b"\n")
+    if lines and lines[-1] == b"":
+        # 文件以换行结尾时，split 会多出一个空元素；它不是一行，去掉。
+        lines = lines[:-1]
 
     if not args.check:
         os.makedirs(view_dir, exist_ok=True)
@@ -56,7 +59,8 @@ def main():
                                  n=b["end"] - b["start"] + 1,
                                  last=len(blocks)).encode("utf-8")
             with open(os.path.join(view_dir, b["file"]), "wb") as f:
-                f.write(head + MARK + chunk)
+                tail = b"\n" if (b is blocks[-1] and raw.endswith(b"\n")) else b""
+                f.write(head + MARK + chunk + tail)
         # 清掉上一版遗留的块文件
         keep = {b["file"] for b in blocks}
         for name in os.listdir(view_dir):
@@ -72,6 +76,8 @@ def main():
             raise SystemExit("missing header marker in %s" % b["file"])
         parts.append(data[idx + len(MARK):])
     joined = b"\n".join(parts)
+    if raw.endswith(b"\n") and not joined.endswith(b"\n"):
+        joined += b"\n"
     ok = joined == raw
     print("source  : %s" % meta["canonical_path"])
     print("lines   : %d   blocks: %d" % (meta["total_lines"], len(blocks)))

@@ -2,7 +2,7 @@
 """校验 src/ 的分块视图能否还原出原文件（去掉每块的注释头后按序拼接）。
 
 用法：
-    python tools/join.py
+    python3 tools/join.py
 """
 import hashlib
 import json
@@ -29,6 +29,8 @@ def main():
     joined = b"\n".join(parts)
 
     raw = open(os.path.join(ROOT, meta["canonical_path"]), "rb").read()
+    if raw.endswith(b"\n") and not joined.endswith(b"\n"):
+        joined += b"\n"
     ok = joined == raw
     print("blocks : %d" % len(blocks))
     print("source : %s" % hashlib.sha256(raw).hexdigest())

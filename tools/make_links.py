@@ -1,10 +1,10 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 """生成核心代码分块索引 CODE_MAP.md，这是本工具唯一的产物。
 
 用法：
-    python tools/make_links.py                     # 自动读 git remote / HEAD
-    python tools/make_links.py --owner alice --repo sntrup653-crt-neon --ref <commit>
-    python tools/make_links.py --ref main          # 用分支名（不推荐用于引用）
+    python3 tools/make_links.py                     # 自动读 git remote / HEAD
+    python3 tools/make_links.py --owner alice --repo sntrup653-crt-neon --ref <commit>
+    python3 tools/make_links.py --ref main          # 用分支名（不推荐用于引用）
 """
 import argparse
 import json

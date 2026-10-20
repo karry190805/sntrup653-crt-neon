@@ -2,7 +2,7 @@
   "source_note": "核心源文件在三个平台包中逐字节相同；分块视图由 tools/split.py 从 a53 包中的这一份切分生成。",
   "canonical_path": "packages/sntrup653-crt-cortex-a53/optimized/crypto_core_multsntrup653.c",
   "view_dir": "src",
-  "total_lines": 1434,
+  "total_lines": 1433,
   "blocks": [
     {"id": "B01", "file": "01_params.c", "start": 1, "title": "文件头、环参数与静态断言", "paper": "§3.1 §3.2", "symbols": "MAIN_N、LOW_N、BLOCKS、BS、_Static_assert"},
     {"id": "B02", "file": "02_gt_index.c", "start": 68, "title": "Good–Thomas 索引与公开补零模式", "paper": "§3.1 §3.3", "symbols": "SNTRUP_GT_IDX、SNTRUP_GT_ACT、SNTRUP_GT_ACT_COUNT"},

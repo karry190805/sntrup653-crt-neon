@@ -1,6 +1,6 @@
 # 核心代码分块索引
 
-源文件 `packages/sntrup653-crt-cortex-a53/optimized/crypto_core_multsntrup653.c`（1434 行）按算法层次切分为 19 块，`src/` 下每块一个文件。切分只加注释头、不改代码，`tools/join.py` 去掉注释头即可拼回并比对 SHA-256；引用用整文件链接，行号不会漂移。三个平台包中的源文件逐字节相同。
+源文件 `packages/sntrup653-crt-cortex-a53/optimized/crypto_core_multsntrup653.c`（1433 行）按算法层次切分为 19 块，`src/` 下每块一个文件。切分只加注释头、不改代码，`tools/join.py` 去掉注释头即可拼回并比对 SHA-256；引用用整文件链接，行号不会漂移。三个平台包中的源文件逐字节相同。
 
 | 块 | 论文小节 | 内容 | 主要函数 / 宏 | 原文件行号 | 分块文件 |
 |---|---|---|---|---|---|
@@ -22,7 +22,7 @@
 | B16 | §3.5 | 低位分支（73 项截断卷积） | `low_part73_scalar、low_part73_neon` | L1060–L1086 | [`16_low73.c`](https://github.com/karry190805/sntrup653-crt-neon/blob/v1.0.0/src/16_low73.c) |
 | B17 | §3.5 | 最终折回与中心化 | `final_folding_scalar、final_folding_neon` | L1087–L1158 | [`17_fold.c`](https://github.com/karry190805/sntrup653-crt-neon/blob/v1.0.0/src/17_fold.c) |
 | B18 | §4.4 | 内部自检 | `sntrup653_internal_selftest` | L1159–L1386 | [`18_selftest.c`](https://github.com/karry190805/sntrup653-crt-neon/blob/v1.0.0/src/18_selftest.c) |
-| B19 | §3 §4.1 | 对外接口函数 | `PQCLEAN_SNTRUP653_CLEAN_crypto_core_multsntrup653` | L1387–L1434 | [`19_entry.c`](https://github.com/karry190805/sntrup653-crt-neon/blob/v1.0.0/src/19_entry.c) |
+| B19 | §3 §4.1 | 对外接口函数 | `PQCLEAN_SNTRUP653_CLEAN_crypto_core_multsntrup653` | L1387–L1433 | [`19_entry.c`](https://github.com/karry190805/sntrup653-crt-neon/blob/v1.0.0/src/19_entry.c) |
 
 ## 纯文本链接（可直接粘进邮件或投稿系统）
 
@@ -47,7 +47,7 @@ B16  16_low73.c                       https://github.com/karry190805/sntrup653-c
 B17  17_fold.c                        https://github.com/karry190805/sntrup653-crt-neon/blob/v1.0.0/src/17_fold.c
 B18  18_selftest.c                    https://github.com/karry190805/sntrup653-crt-neon/blob/v1.0.0/src/18_selftest.c
 B19  19_entry.c                       https://github.com/karry190805/sntrup653-crt-neon/blob/v1.0.0/src/19_entry.c
-https://github.com/karry190805/sntrup653-crt-neon/blob/v1.0.0/packages/sntrup653-crt-cortex-a53/optimized/crypto_core_multsntrup653.c#L1-L1434   （整份源文件）
+https://github.com/karry190805/sntrup653-crt-neon/blob/v1.0.0/packages/sntrup653-crt-cortex-a53/optimized/crypto_core_multsntrup653.c#L1-L1433   （整份源文件）
 ```
 
 ## 复现入口

@@ -6,7 +6,7 @@
 
 | 用途 | 位置 |
 |---|---|
-| 编译、复现表 1 与表 2 | `packages/sntrup653-crt-cortex-a53/optimized/crypto_core_multsntrup653.c`（1434 行；A76、X1C 两个包内为同名文件，三份逐字节一致） |
+| 编译、复现表 1 与表 2 | `packages/sntrup653-crt-cortex-a53/optimized/crypto_core_multsntrup653.c`（1433 行；A76、X1C 两个包内为同名文件，三份逐字节一致） |
 | 阅读、在论文里引用 | `src/01_params.c` … `src/19_entry.c`（19 个文件，与论文小节的对应见 [`CODE_MAP.md`](CODE_MAP.md)） |
 
 `src/` 是上面那份源文件的逐字节切分，只在每块前加一段注释头；`tools/join.py` 去掉注释头拼回原文件并比对 SHA-256。分块不做成独立编译单元，拆分会改变内联与代码布局，表 1、表 2 就不再对应仓库里的代码。

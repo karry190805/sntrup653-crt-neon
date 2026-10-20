@@ -9,7 +9,7 @@
 只需要 python3，不需要 ARM 硬件。
 
 用法：
-    python scripts/check_testcases.py
+    python3 scripts/check_testcases.py
 """
 import importlib.util
 import os
