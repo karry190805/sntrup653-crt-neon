@@ -1,0 +1,5 @@
+Public Domain
+
+本仓库中的代码（含 packages/ 下的 optimized/ 与 baseline/）以公有领域方式发布。
+baseline/ 来自 PQClean Round 3 的 sntrup653 纯 C 实现，其许可同样为 Public Domain，
+详见各包内的 LICENSE 文件。

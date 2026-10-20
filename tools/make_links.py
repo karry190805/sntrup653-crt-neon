@@ -130,9 +130,9 @@ def main():
     avail.append("% 由 tools/make_links.py 生成：代码可用性段落，可直接粘进论文。")
     avail.append("本文实现、三个平台的交付包与全部评测脚本见")
     avail.append("\\url{%s}。" % base)
-    avail.append("核心多项式乘法位于 \\texttt{%s}（共 %d 行），"
-                 % (path.replace("_", "\\_"), meta["total_lines"]))
-    avail.append("各分块与行号的对应关系见表~\\ref{tab:code-map}。")
+    avail.append("核心多项式乘法位于各平台包的 \\texttt{optimized/} 目录（共 %d 行），"
+                 % meta["total_lines"])
+    avail.append("分块与行号的对应关系见表~\\ref{tab:code-map}。")
     avail.append("")
     with open(os.path.join(ROOT, "paper", "code_availability.tex"), "w", encoding="utf-8", newline="\n") as f:
         f.write("\n".join(avail))
