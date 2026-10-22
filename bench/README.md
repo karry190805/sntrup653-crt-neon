@@ -27,7 +27,7 @@ bench/
 （各包的 `platform.conf` 给出该平台建议的核号）。
 
 ```bash
-PLATFORM=a76 CPU_PIN=6 sudo -E bash bench/frequency.sh set   # 先锁频
+PLATFORM=a76 CPU_PIN=6 LOCK_MAX_FREQ=1 sudo -E bash bench/frequency.sh set   # 先锁频
 PLATFORM=a76 CPU_PIN=6 bash bench/run_polymul.sh             # 表 1
 PLATFORM=a76 CPU_PIN=6 bash bench/run_sessions.sh            # 表 2
 PLATFORM=a76 CPU_PIN=6 bash bench/run_kem.sh                 # 可选，单次诊断
@@ -44,7 +44,7 @@ PLATFORM=a76 CPU_PIN=6 sudo -E bash bench/frequency.sh restore
 | 多项式乘法 | 预热 200 次，每轮 2000 次调用，100 轮，`ABBA` 配对顺序 |
 | KEM | 每轮预热 100 次、1000 次调用，5 组会话 |
 | 随机种子 | `BASE_SEED=20260901`（基线与优化版用同一串输入） |
-| 频率 | governor 设为 `performance`，可选锁到 `cpuinfo_max_freq` |
+| 频率 | governor 设为 `performance`，测量时用 `LOCK_MAX_FREQ=1` 锁到 `cpuinfo_max_freq` |
 | 亲和性 | `taskset -c $CPU_PIN` 绑定单核 |
 
 每轮记录一次平均单次调用时间。汇总时先对各实现的轮值取均值，再用基线与优化版的配对比值计算加速比；置信区间来自按轮次分块重采样的 bootstrap（4000 次重采样、40 块），判定用双侧符号检验。论文表 2 以五个 ABBA/BAAB 会话作为独立复测单位。论文里的数字都是**单核、锁频**下的挂钟时间。
