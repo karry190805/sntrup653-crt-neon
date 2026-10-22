@@ -69,12 +69,35 @@ def main():
               "切分只加注释头、不改代码，`tools/join.py` 去掉注释头即可拼回并比对 SHA-256；"
               "引用用整文件链接，行号不会漂移。三个平台包中的源文件逐字节相同。\n"
               % (meta["canonical_path"], meta["total_lines"], len(blocks), meta["view_dir"]))
-    md.append("| 块 | 论文小节 | 内容 | 主要函数 / 宏 | 原文件行号 | 分块文件 |")
-    md.append("|---|---|---|---|---|---|")
+    md.append("## 推荐阅读顺序\n")
+    md.append("从 B19 的对外接口开始读，生产路径只有一条：\n")
+    md.append("B19 入口函数 → B06 表初始化 → B07 输入分块 → B12 77 点 NEON 变换（正向）"
+              " → B14 十六维局部乘法 → B12 逆变换 → B16 低位 73 项分支"
+              " → B17 目标环折回 → B19 编码输出\n")
+    md.append("B05、B09 是主路径反复调用的模 q 运算与 NEON 约减辅助函数，"
+              "B15 提供系数索引与四通道点积。其余几块不在主路径上：\n")
+    md.append("- B08 是标量 Good–Thomas 参考实现，只在非 NEON 构建和内部自检中调用。")
+    md.append("- B10 是 7 点/11 点和差配对变换的基础函数，由 B12 调用。")
+    md.append("- B11 是公开补零模式下的编译期特化，宏展开进 B12。")
+    md.append("- B13 是十六维局部乘法的标量参考实现与 NEON 辅助函数，辅助函数由 B14 调用。")
+    md.append("- B18 只在内部测试宏打开时使用，不属于生产路径。\n")
+    md.append("## 三条路径\n")
+    md.append("| 路径 | 涉及块 | 说明 |")
+    md.append("|---|---|---|")
+    md.append("| 生产 | B19 → B06/B07 → B12 → B14 → B16 → B17 | 交付包实际编译、计时的代码 |")
+    md.append("| 参考 | B08、B13 的标量版本 | 与 NEON 版本对照，内部自检使用 |")
+    md.append("| 测试 | B18、B07 的 `compare_blocks_detail` | 定义 "
+              "`SNTRUP653_INTERNAL_TEST_HOOKS` 时才编译 |")
+    md.append("")
+    md.append("## 分块表\n")
+    md.append("| 块 | 论文小节 | 内容 | 输入 → 输出 | 路径 | 主要函数 / 宏 | 原文件行号 | 分块文件 |")
+    md.append("|---|---|---|---|---|---|---|---|")
     for b in blocks:
         sym = b.get("symbols", "").replace("|", "\\|")
-        md.append("| %s | %s | %s | `%s` | L%d–L%d | [`%s`](%s) |"
-                  % (b["id"], b["paper"], b["title"], sym, b["start"], b["end"], b["file"], url(b)))
+        io_s = b.get("io", "—").replace("|", "\\|")
+        md.append("| %s | %s | %s | %s | %s | `%s` | L%d–L%d | [`%s`](%s) |"
+                  % (b["id"], b["paper"], b["title"], io_s, b.get("role", ""),
+                     sym, b["start"], b["end"], b["file"], url(b)))
     md.append("")
     md.append("## 纯文本链接（可直接粘进邮件或投稿系统）\n")
     md.append("```text")
@@ -85,8 +108,8 @@ def main():
     md.append("```")
     md.append("")
     md.append("## 复现入口\n")
-    md.append("每个平台包都是自包含的，按 `README.md` 的“快速开始”一节执行 "
-              "`sudo bash ./run_on_target.sh` 即可重跑编译、正确性与计时。\n")
+    md.append("三个平台包各自自包含。根目录 `README.md` 的“三种跑法”给出本地自检、"
+              "板卡正确性与性能复现三条命令。\n")
     with open(os.path.join(ROOT, "CODE_MAP.md"), "w", encoding="utf-8", newline="\n") as f:
         f.write("\n".join(md))
 

@@ -21,6 +21,7 @@ HEADER = """\
 /* {bid} {title}
  *
  * crypto_core_multsntrup653.c 第 {start}–{end} 行，共 {n} 行。
+{note}\
  * 分块视图，不单独编译；去掉本注释后按 B01–B{last:02d} 顺序拼接即为原文件，
  * tools/join.py 可校验 SHA-256。
  */
@@ -54,10 +55,11 @@ def main():
         os.makedirs(view_dir, exist_ok=True)
         for b in blocks:
             chunk = b"\n".join(lines[b["start"] - 1:b["end"]])
+            note = (" * %s\n" % b["note"]) if b.get("note") else ""
             head = HEADER.format(bid=b["id"], title=b["title"], paper=b["paper"],
                                  start=b["start"], end=b["end"],
                                  n=b["end"] - b["start"] + 1,
-                                 last=len(blocks)).encode("utf-8")
+                                 note=note, last=len(blocks)).encode("utf-8")
             with open(os.path.join(view_dir, b["file"]), "wb") as f:
                 tail = b"\n" if (b is blocks[-1] and raw.endswith(b"\n")) else b""
                 f.write(head + MARK + chunk + tail)

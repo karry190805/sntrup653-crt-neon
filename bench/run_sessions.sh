@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 五组 ABBA/BAAB 会话级复测，用来给出表 1、表 2 的置信区间。
+# 五组 ABBA/BAAB 会话级复测，给出表 2 的会话聚合与会话级置信区间。
 # 包装 packages/sntrup653-crt-cortex-<PLATFORM>/run_sessions.sh。
 #
 # 用法：PLATFORM=a53 CPU_PIN=2 bash bench/run_sessions.sh

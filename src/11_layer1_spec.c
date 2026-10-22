@@ -1,6 +1,7 @@
 /* B11 第一层编译期特化（零项消除）
  *
  * crypto_core_multsntrup653.c 第 701–816 行，共 116 行。
+ * 宏定义，只在 SNTRUP653_PUBLIC_ZS_MODE=1 时展开进 B12。
  * 分块视图，不单独编译；去掉本注释后按 B01–B19 顺序拼接即为原文件，
  * tools/join.py 可校验 SHA-256。
  */

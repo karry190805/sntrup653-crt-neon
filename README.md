@@ -7,13 +7,24 @@
 | 用途 | 位置 |
 |---|---|
 | 编译、复现表 1 与表 2 | `packages/sntrup653-crt-cortex-a53/optimized/crypto_core_multsntrup653.c`（1433 行；A76、X1C 两个包内为同名文件，三份逐字节一致） |
-| 阅读、在论文里引用 | `src/01_params.c` … `src/19_entry.c`（19 个文件，与论文小节的对应见 [`CODE_MAP.md`](CODE_MAP.md)） |
+| 阅读、在论文里引用 | `src/01_params.c` … `src/19_entry.c`（19 个文件，阅读顺序见 [`CODE_MAP.md`](CODE_MAP.md)） |
 
 `src/` 是上面那份源文件的逐字节切分，只在每块前加一段注释头；`tools/join.py` 去掉注释头拼回原文件并比对 SHA-256。分块不做成独立编译单元，拆分会改变内联与代码布局，表 1、表 2 就不再对应仓库里的代码。
 
-引用时用发布标签下的整文件链接，行号不会漂移，例如 [`src/14_w16_kernel.c`](https://github.com/karry190805/sntrup653-crt-neon/blob/v1.0.0/src/14_w16_kernel.c)。分块边界在 `tools/blocks.json`。
+引用时用发布标签下的整文件链接，行号不会漂移，例如 [`src/14_w16_kernel.c`](https://github.com/karry190805/sntrup653-crt-neon/blob/v1.0.0/src/14_w16_kernel.c)。分块边界在 `tools/blocks.json`；每块的输入输出、是否在生产路径上，见 [`CODE_MAP.md`](CODE_MAP.md)。
 
-没有 ARM 板卡时，`bash scripts/test.sh` 在任意机器上校验分块能否还原、12 组固定测例与 1971 个用例的哈希序列，只需要 python3，细节见 [`scripts/README.md`](scripts/README.md)。
+### 论文表格从哪里来
+
+| 论文 | 入口 | 证据文件 |
+|---|---|---|
+| 表 1 多项式乘法 | `bench/run_polymul.sh` | `results/<平台>/polymul_ab/summary.txt` |
+| 表 2 KEM 分阶段与端到端 | `bench/run_sessions.sh` | `results/<平台>/summary_sessions.txt` |
+
+表 2 以五个 ABBA/BAAB 会话为复测单位，取 `summary_sessions.csv` 的会话聚合值，不是单次运行的均值。
+
+`bench/run_kem.sh` 是单次 KEM 分阶段诊断，用来快速看各阶段耗时，不生成表 2。
+
+`run_sessions.sh` 的每个会话里也会跑多项式乘法（`session_0X/polymul_first|second`），用于同一会话内的漂移对照；表 1 的数字与置信区间仍取 `run_polymul.sh` 的 `polymul_ab/summary.txt`。
 
 ## 目录
 
@@ -23,8 +34,8 @@ src/         分块视图 B01–B19（由 split.py 生成，勿手改）
 tools/       分块定义与切分、还原、索引脚本
 bench/       三个平台的计时脚本（测试程序在各包 shared/ 里）
 scripts/     自检脚本与固定测例
-results/     三个平台的测量输出，含逐轮原始数据（表 1、表 2 的来源）
-CODE_MAP.md  分块索引
+results/     已提交的测量输出（表 1、表 2 与消融的来源）
+CODE_MAP.md  分块索引、阅读顺序与数据流
 ```
 
 三个平台分别是 KICKPI K2B（Allwinner H618）、Radxa ROCK 5B+（RK3588）和 Radxa Dragon Q8B（Snapdragon 8cx Gen 3）。
@@ -39,14 +50,34 @@ shared/        计时、正确性、端到端测试与自检程序
 VERIFICATION.md / RANGE_AND_SECURITY.md / LOCAL_VALIDATION.md   验证与适用边界说明
 ```
 
-## 快速开始
+根目录 `results/` 保存投稿时提交的测量证据。运行脚本时结果写进 `packages/<平台>/results/`，那是新生成的目录，会随运行时间与主机状态变化。两者不是同一个目录。
 
-在 ARM64 Linux 上，以 A76 为例，其余两个平台换目录名即可：
+## 三种跑法
+
+### A. 没有 ARM 板卡：校验代码与测例
+
+```bash
+bash scripts/test.sh
+```
+
+只需要 python3。它校验分块能否拼回原文件、12 组固定测例，以及 1971 个用例的 oracle 哈希序列。它不编译 AArch64 代码，也不产生计时数字。
+
+### B. 有目标板卡：只跑正确性
 
 ```bash
 cd packages/sntrup653-crt-cortex-a76
-sudo QUICK=1 bash ./run_on_target.sh --no-pack   # 短流程，几分钟，先确认环境
-sudo bash ./run_on_target.sh                      # 完整流程，含计时与打包
+CPU_PIN=6 bash ./run_correctness.sh
+```
+
+覆盖内部构造自检、基线与优化核心逐字节对比、一阶原理 oracle、KEM 转录对比、并发首调用与栈预算。其余两个平台换目录名即可。
+
+### C. 有目标板卡：复现论文性能表
+
+```bash
+cd packages/sntrup653-crt-cortex-a76
+sudo CPU_PIN=6 bash ./set_performance.sh        # 锁定频率，状态写入 results/cpu6_performance_state.txt
+CPU_PIN=6 bash ./run_sessions.sh                # 五组会话，得到表 2
+sudo bash ./restore_performance.sh results/cpu6_performance_state.txt
 ```
 
 需要 root：脚本要锁定频率并绑定测量核。依赖（未安装过时执行一次）：
@@ -54,6 +85,13 @@ sudo bash ./run_on_target.sh                      # 完整流程，含计时与�
 ```bash
 sudo apt-get update && sudo apt-get install -y --no-install-recommends \
     clang gcc binutils util-linux coreutils python3 unzip
+```
+
+完整流程（编译、正确性、计时与打包）仍是一条命令：
+
+```bash
+sudo QUICK=1 bash ./run_on_target.sh --no-pack   # 短流程，几分钟，先确认环境
+sudo bash ./run_on_target.sh                      # 完整流程
 ```
 
 完整流程结束时应出现
@@ -86,7 +124,8 @@ KEM 端到端（一次密钥生成 + 封装 + 解封装，论文表 2，单核�
 ```bash
 PLATFORM=a76 CPU_PIN=6 sudo -E bash bench/frequency.sh set   # 锁定频率
 PLATFORM=a76 CPU_PIN=6 bash bench/run_polymul.sh             # 表 1
-PLATFORM=a76 CPU_PIN=6 bash bench/run_kem.sh                 # 表 2
+PLATFORM=a76 CPU_PIN=6 bash bench/run_sessions.sh            # 表 2
+PLATFORM=a76 CPU_PIN=6 bash bench/run_kem.sh                 # 可选，单次诊断
 PLATFORM=a76 CPU_PIN=6 sudo -E bash bench/frequency.sh restore
 ```
 
