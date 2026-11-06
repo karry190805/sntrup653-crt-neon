@@ -8,9 +8,10 @@ endif()
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 add_library(sntrup653_crt_neon STATIC
-  src/crypto_core_multsntrup653.c
+  packages/sntrup653-crt-cortex-a76/optimized/crypto_core_multsntrup653.c
 )
-target_include_directories(sntrup653_crt_neon PUBLIC src include)
+target_include_directories(sntrup653_crt_neon PUBLIC
+  packages/sntrup653-crt-cortex-a76/optimized include)
 target_compile_options(sntrup653_crt_neon PRIVATE -O3 -Wall -Wextra)
 
 add_custom_target(target_validation

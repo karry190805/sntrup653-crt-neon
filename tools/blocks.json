@@ -1,0 +1,27 @@
+{
+  "canonical_path": "packages/sntrup653-crt-cortex-a76/optimized/crypto_core_multsntrup653.c",
+  "view_dir": "src",
+  "total_lines": 2751,
+  "note": "The slices are a read-only reviewer view. The platform packages are the compilable source trees.",
+  "blocks": [
+    ["01_params.c", "header, types, constants and compile-time parameters"],
+    ["02_constants.c", "public schedules and static table state"],
+    ["03_tables.c", "transform tables and packed constants"],
+    ["04_barrett.c", "mod-q arithmetic and representative conversion"],
+    ["05_init_tables.c", "77th-root and 7/11-point table initialization"],
+    ["06_blockify.c", "block representation and input zero padding"],
+    ["07_gt77_ref.c", "scalar Good--Thomas reference path"],
+    ["08_neon_modq.c", "NEON reduction and store helpers"],
+    ["09_dft_pair.c", "paired 7-point and 11-point transforms"],
+    ["10_layer1_macros.c", "compile-time first-layer specialization"],
+    ["11_transform16_macros.c", "16-bit transform macros"],
+    ["12_gt77_neon.c", "NEON Good--Thomas transform"],
+    ["13_w16_helpers.c", "8+8 local product helpers"],
+    ["14_w16_kernel.c", "16-dimensional weighted TMVP kernel"],
+    ["15_dot.c", "coefficient indexing and pointwise accumulation"],
+    ["16_low73.c", "low 73-coefficient branch"],
+    ["17_fold.c", "CRT recovery, fold-back and centering"],
+    ["18_selftest.c", "internal construction self-tests"],
+    ["19_entry.c", "public multiplication entry point"]
+  ]
+}
