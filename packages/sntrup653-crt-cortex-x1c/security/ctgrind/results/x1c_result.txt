@@ -1,0 +1,2 @@
+ctgrind_rc=0
+==3456== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

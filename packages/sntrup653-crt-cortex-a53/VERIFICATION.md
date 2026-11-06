@@ -95,8 +95,9 @@ wrong answer cannot be measured as a win.
 
 The range arguments in `RANGE_AND_SECURITY.md` model the source schedule, not
 the machine code, and a compiler is free to reassociate or vectorise. The cheap
-empirical answer is to build the same core with GCC and Clang at each of
-`-O0`, `-O1`, `-O2`, `-O3` and `-Os`, and require one correctness hash:
+empirical answer is to build the same core with GCC and, when available, Clang
+at each of `-O0`, `-O1`, `-O2`, `-O3` and `-Os`, and require one correctness
+hash:
 
 ```bash
 REQUIRE_ALL_COMPILERS=1 bash ./check_multicompiler.sh
@@ -104,6 +105,21 @@ REQUIRE_ALL_COMPILERS=1 bash ./check_multicompiler.sh
 # compiler=clang RESULT=PASS combos=5 unique_hashes=1 hash=0x...
 # multicompiler=PASS compilers=2 combos=10 unique_hashes=1 hash=0x...
 ```
+
+The delivered host has both GCC and Clang, and the recorded result is the full
+ten-combination matrix (`compilers_tested=2`, `compilers_missing=0`,
+`unique_hashes=1`). `preflight.sh` treats a missing Clang as a warning, and
+`check_multicompiler.sh` defaults to `REQUIRE_ALL_COMPILERS=1`; set it to
+`0` on a GCC-only host so the missing compiler is reported instead of
+pretended to have been tested. Install Clang to run the full matrix.
+
+One portability detail is worth recording. Clang at `-O0` does not unroll the
+five-step 11-point inner loop, so `vmlal_laneq_s16(..., j - 1)` is not a
+constant lane and the intrinsic is rejected. The core therefore writes those
+five steps out through `SNTRUP_DFT11_STEP16()` with literal lane numbers for
+Clang, while GCC keeps the `#pragma GCC unroll 5` loop. The two expansions have
+the same arithmetic and the same correctness hash; the GCC machine code and
+cycle count are unchanged.
 
 This is coverage, not an equivalence proof. It is reported that way on purpose.
 The same distinction applies to `-O3`-versus-`-O1` logical equivalence checking
@@ -114,13 +130,43 @@ is not attempted here.
 
 A switch wired to the wrong helper, or a fallback that has drifted away from the
 vector path, is invisible to every other test because nothing else builds the
-other arm. Nine variants are built and each runs all three correctness suites:
+other arm. Ten variants are built and each runs all three correctness suites:
 
 `default`, `dense`, `rtmask`, `dense_rtmask`, `noinplace`, `low73_scalar`,
-`fold_scalar`, `no_barrett`, `all_fallbacks`.
+`fold_scalar`, `no_barrett`, `no_fast16`, `all_fallbacks`.
 
-All nine must produce the same correctness hash. `rtmask` in particular compiles
+All ten must produce the same correctness hash. `rtmask` in particular compiles
 `SNTRUP653_PUBLIC_ZS_RUNTIME_MASK=1`, an arm the shipped build never selects.
+`no_fast16` forces the int32 transform path, so the int16 path and its fallback
+are both exercised.
+
+### 5.1 Math fingerprint (`check_math_fingerprint.sh`)
+
+Correctness hashes compare final outputs. They do not, by themselves, prove that
+every intermediate table is the same object. opt21 adds
+`sntrup653_math_fingerprint()`, a test-hook-only FNV-1a-64 over:
+
+- `p`, `q`, `w`, `MAIN_N`, `LOW_N`, `LOW_NP`, `BLOCKS`, `BS`,
+  `PAIRWISE_QOFF_MULT`;
+- `ROOT77`, `LAMBDA77`, `SQRT_LAMBDA77`, `INV2`, `INV77` and the derived
+  Shoup constants;
+- `POW7_F/I`, `POW11_F/I`, `PAIR7_*`, `PAIR11_*`, `P7Q_*`, `M7Q_*`,
+  `P11Q_*`, `M11Q_*`;
+- the radix-2 / TMVP weights (`W16C`, `W16_INV2*`, `P7V_*`, `M7V_*`);
+- the Good–Thomas index maps and the public pruning schedule
+  (`GT_IDX_RS`, `GT_K_UV`, `ACTIVE_COLS_PER_R`, `ACTIVE_COL_LIST`,
+  `ACTIVE_PAIR_MASK11`).
+
+The same binary also runs one fixed multiplication and checks that every output
+is centred-canonical (`2·|v| < q`). `check_math_fingerprint.sh` builds it for
+the ten switch variants and for gcc `-O0..-Os` and requires one fingerprint:
+
+```
+math_fingerprint=PASS checks=15 unique=1 value=0xa866aa344f934dca
+```
+
+Because the function lives behind `SNTRUP653_INTERNAL_TEST_HOOKS`, the
+production view is unchanged and `check_selftest_isolation.py` still passes.
 
 ## 6. Concurrency (`test_concurrent_firstcall`)
 
@@ -158,14 +204,15 @@ package's default switch settings, and hash what remains.
 
 ```bash
 python3 ./check_selftest_isolation.py
-# selftest_isolation=PASS production view unchanged (9749385416ba3e53)
+# selftest_isolation=PASS production view unchanged (c8d4791b931f30c9)
 ```
 
-The production view of the core is 1026 lines and hashes to
-`9749385416ba3e53bf1fe81be01f5becb6a74ea723b60e100fcfd5910faabad4`. It is
-identical to the production view of the package that shipped before the new
-tests were added, which is what makes "the delivered arithmetic is unchanged" a
-statement about bytes rather than about intent.
+The production view of the core is 2048 lines and hashes to
+`f7c6f935f404bc4a19d3be4ab24591a503eaf89b2ba6ad63a3567b49c83d828b`. That is the digest recorded in
+`expected_production_core.sha256`, so
+every line outside the `SNTRUP653_INTERNAL_TEST_HOOKS` conditionals is the
+delivered production translation unit. Any edit outside those conditionals
+changes the digest and fails the check.
 
 Every fresh board run records this digest together with the source manifest.
 The digest is meaningful only with the stated preprocessing convention, so the
@@ -184,8 +231,9 @@ These are limitations, stated so that a reviewer does not have to find them.
 3. **Byte-wise equivalence is capped by the reference.** "Same as baseline" is
    exactly as strong as "PQClean round-3 clean C", which is well studied but is
    not itself a proof. The oracle in §2 is the answer to that, not §3.
-4. **Compiler invariance is empirical.** Ten compiler/level combinations on one
-   machine is coverage; it is not a guarantee about an unmeasured toolchain.
+4. **Compiler invariance is empirical.** Ten compiler/level combinations when
+   Clang is installed (five GCC levels otherwise) on one machine is coverage; it
+   is not a guarantee about an unmeasured toolchain.
 5. **The timing screen is not a proof.** It is a first-order Welch test
    (`NO_SIGNAL`, threshold 5, no multiple-comparison correction), not dudect. It
    has no power against higher-order effects, power, or EM leakage. `NO_SIGNAL`

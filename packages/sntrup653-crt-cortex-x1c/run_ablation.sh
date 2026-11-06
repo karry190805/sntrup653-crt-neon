@@ -1,17 +1,18 @@
 #!/usr/bin/env bash
 # run_ablation.sh — one-factor-at-a-time ablation of the optimization switches.
 #
-# Every arm is the delivered core with exactly one switch turned off, plus the
-# untouched reference core. Comparing arm against the delivered configuration
-# isolates the contribution of that single switch, phase by phase.
+# The FAST16 single-factor arms turn off exactly one switch (no_low73,
+# no_fold, no_barrett).  no_zs_32bit is deliberately configuration-level: the
+# 16-bit path is not range-safe for the dense transform, so it uses the 32-bit
+# path.  It is reported separately and is not mixed into the single-factor
+# claims.
 #
 #   all         delivered configuration (all switches on)   <- reference
 #   baseline    reference PQClean core, no switches at all
-#   no_inplace  SNTRUP653_USE_INPLACE_BUFFERS=0
-#   no_zs       SNTRUP653_PUBLIC_ZS_MODE=0
-#   no_low73    SNTRUP653_LOW73_NEON=0
-#   no_fold     SNTRUP653_FINAL_FOLD_NEON=0
-#   no_barrett  USE_BARRETT_REDUCE=0        (opt-in, see EXTRA_ARMS)
+#   no_zs_32bit SNTRUP653_FAST16=0, SNTRUP653_PUBLIC_ZS_MODE=0
+#   no_low73    SNTRUP653_FAST16=1, SNTRUP653_LOW73_NEON=0
+#   no_fold     SNTRUP653_FAST16=1, SNTRUP653_FINAL_FOLD_NEON=0
+#   no_barrett  SNTRUP653_FAST16=1, USE_BARRETT_REDUCE=0 (opt-in, see EXTRA_ARMS)
 #
 # Each arm runs twice, once in the forward epoch and once in the mirrored epoch,
 # so a linear drift cannot be mistaken for an optimization effect. All arms use
@@ -25,6 +26,8 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 cd "$SCRIPT_DIR"
 . "$SCRIPT_DIR/platform.conf"
+
+export STRICT_SAME_FLAGS="${STRICT_SAME_FLAGS:-1}"
 
 ROUNDS="${1:-${ABLATION_ROUNDS:-600}}"
 WARMUP="${2:-${ABLATION_WARMUP:-100}}"
@@ -51,7 +54,7 @@ done
 [ "$ROUNDS" -gt 0 ] && [ "$CORE_LOOPS" -gt 0 ] || { echo "error: ROUNDS and CORE_LOOPS must be positive" >&2; exit 2; }
 
 # ---------------------------------------------------------------- arms
-BUILD_ARMS=(no_inplace no_zs no_low73 no_fold)
+BUILD_ARMS=(no_zs_32bit no_low73 no_fold)
 case ",${EXTRA_ARMS}," in
   *,no_barrett,*) BUILD_ARMS+=(no_barrett) ;;
 esac
@@ -69,11 +72,10 @@ fi
 arm_build_env() {
   case "$1" in
     all)        ;;
-    no_inplace) printf '%s\n' "SNTRUP653_USE_INPLACE_BUFFERS=0" ;;
-    no_zs)      printf '%s\n' "SNTRUP653_PUBLIC_ZS_MODE=0" ;;
-    no_low73)   printf '%s\n' "SNTRUP653_LOW73_NEON=0" ;;
-    no_fold)    printf '%s\n' "SNTRUP653_FINAL_FOLD_NEON=0" ;;
-    no_barrett) printf '%s\n' "USE_BARRETT_REDUCE=0" ;;
+    no_zs_32bit) printf '%s\n' "SNTRUP653_FAST16=0" "SNTRUP653_PUBLIC_ZS_MODE=0" ;;
+    no_low73)   printf '%s\n' "SNTRUP653_FAST16=1" "SNTRUP653_LOW73_NEON=0" ;;
+    no_fold)    printf '%s\n' "SNTRUP653_FAST16=1" "SNTRUP653_FINAL_FOLD_NEON=0" ;;
+    no_barrett) printf '%s\n' "SNTRUP653_FAST16=1" "USE_BARRETT_REDUCE=0" ;;
     *) return 1 ;;
   esac
 }

@@ -96,6 +96,6 @@ sha256sum "$SECURITY_DIR"/check_* "$SECURITY_DIR"/probes.o \
   cat "$SECURITY_DIR/timing_status.txt"
   echo "full_binary_constant_time=NOT_PROVEN"
   echo "second_compiler=NOT_RUN_IN_THIS_STAGE"
-  echo "second_compiler_evidence=check_multicompiler.sh (run_release.sh extended stage)"
+  echo "second_compiler_evidence=check_multicompiler.sh (optional extended stage)"
 } > "$SECURITY_DIR/STATUS.txt"
 echo "security_results=$SECURITY_DIR"

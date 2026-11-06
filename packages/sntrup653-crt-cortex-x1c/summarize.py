@@ -366,7 +366,7 @@ def cmd_ablation(output, roots):
     arms = sorted({arm for _, arm, _ in groups})
     if "all" not in arms:
         raise SystemExit("ablation data has no delivered 'all' arm")
-    expected = {"all", "baseline", "no_inplace", "no_zs", "no_low73", "no_fold"}
+    expected = {"all", "baseline", "no_zs_32bit", "no_low73", "no_fold"}
     missing = expected - set(arms)
     if missing:
         raise SystemExit("missing ablation arms: %s" % sorted(missing))
@@ -379,7 +379,7 @@ def cmd_ablation(output, roots):
     head("ABLATION: delivered_speedup = mean(arm) / mean(delivered)")
     print("kind,arm,metric,epochs,samples,arm_mean_ms,delivered_mean_ms,"
           "delivered_speedup,ci95_low,ci95_high,p_value,rounds_faster/compared,verdict")
-    arm_order = ["all", "baseline", "no_inplace", "no_zs", "no_low73", "no_fold"]
+    arm_order = ["all", "baseline", "no_zs_32bit", "no_low73", "no_fold"]
     # Report any extra arms present in the data (e.g. the opt-in no_barrett)
     # after the required ones instead of silently dropping them.
     arm_order += [arm for arm in arms if arm not in arm_order]

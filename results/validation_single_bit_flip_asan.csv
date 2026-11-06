@@ -1,0 +1,4 @@
+platform,execution,batches,bits_per_ct,total_flips,accepted,rejected,nonzero_rc,transcript_identical,result
+A76,native,1,7176,7176,0,7176,0,1,PASS
+A53,native,1,7176,7176,0,7176,0,1,PASS
+X1C,native,1,7176,7176,0,7176,0,1,PASS

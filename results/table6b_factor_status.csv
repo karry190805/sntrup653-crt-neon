@@ -1,0 +1,13 @@
+factor,category,switch_or_mechanism,a76_status,a53_status,x1c_status,note
+11-point DFT split,structural,radix-11 factor of the 77-point Good-Thomas decomposition; compiled in,not independently switchable,not independently switchable,not independently switchable,no alternate implementation or build macro
+Shoup multiplication,structural,precomputed Shoup roots/scaled multipliers; compiled in,not independently switchable,not independently switchable,not independently switchable,no alternate implementation or build macro
+input centering,structural,centered coefficient representation before transforms; compiled in,not independently switchable,not independently switchable,not independently switchable,no alternate implementation or build macro
+block fusion,structural,fused blockwise pass layout; compiled in,not independently switchable,not independently switchable,not independently switchable,no alternate implementation or build macro
+TMVP 4 accumulators,structural,four-accumulator size-8 TMVP schedule; compiled in,not independently switchable,not independently switchable,not independently switchable,no alternate implementation or build macro
+1/77 folding,structural,scale by 1/77 merged into the inverse transform; compiled in,not independently switchable,not independently switchable,not independently switchable,no alternate implementation or build macro
+skip final reduce,structural,skip_final_reduce path selected by the fixed schedule; compiled in,not independently switchable,not independently switchable,not independently switchable,no alternate implementation or build macro
+zero-skipping,switchable,SNTRUP653_PUBLIC_ZS_MODE=0,configuration-level (no_zs_32bit),configuration-level (no_zs_32bit),configuration-level (no_zs_32bit),dense 16-bit transform is not range-safe; uses the 32-bit path
+low-73 Neon,switchable,SNTRUP653_LOW73_NEON=0,measured FAST16 (no_low73),measured FAST16 (no_low73),measured FAST16 (no_low73),Neon low-73 convolution
+fused fold,switchable,SNTRUP653_FINAL_FOLD_NEON=0,measured FAST16 (no_fold),measured FAST16 (no_fold),measured FAST16 (no_fold),final_fold + encode fusion
+in-place reuse,switchable,SNTRUP653_USE_INPLACE_BUFFERS=0,removed: no FAST16 non-in-place path,removed: no FAST16 non-in-place path,removed: no FAST16 non-in-place path,not a single-factor FAST16 arm; the old 32-bit arm was configuration-level
+Barrett reduction (extra),switchable,USE_BARRETT_REDUCE=0,measured FAST16 (no_barrett),measured FAST16 (no_barrett),measured FAST16 (no_barrett),"same-path % q reducer fallback; measures fallback cost, not a delivered optimization and not a 32-bit fallback"

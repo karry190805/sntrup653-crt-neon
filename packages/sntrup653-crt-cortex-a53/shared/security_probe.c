@@ -67,7 +67,9 @@ static int test_interfaces(void) {
         unsigned char in[2 * p], key[p], ref[2 * p], got[2 * p + 32], alias[2 * p];
         Fq f[p];
         small g[p];
-        int low_ref[LOW_N], low_opt[LOW_N];
+        /* low_part73_neon() fills whole eight-lane groups, so its output
+         * buffer is LOW_NP ints; only the first LOW_N are meaningful. */
+        int low_ref[LOW_NP], low_opt[LOW_NP];
         for (int i = 0; i < 2 * p; i++) in[i] = (unsigned char)selftest_rand32();
         for (int i = 0; i < p; i++) key[i] = (unsigned char)selftest_rand32();
         baseline_crypto_core_multsntrup653(ref, in, key);
@@ -87,7 +89,7 @@ static int test_interfaces(void) {
         }
         low_part73_scalar(low_ref, f, g);
         low_part73_neon(low_opt, f, g);
-        if (memcmp(low_ref, low_opt, sizeof(low_ref))) return 4;
+        if (memcmp(low_ref, low_opt, LOW_N * sizeof(int))) return 4;
     }
     return 0;
 }

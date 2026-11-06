@@ -1,0 +1,3 @@
+voltage_mV: n=355 mean=8698.439 median=8696.000 max=8730.000
+current_mA: n=355 mean=1194.459 median=1156.000 max=1842.000
+power_uW: n=355 mean=10390491.124 median=10058958.000 max=16080660.000

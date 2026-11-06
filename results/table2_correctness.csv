@@ -1,0 +1,15 @@
+check,a76,a53,x1c,evidence
+math_fingerprint,0xa866aa344f934dca,0xa866aa344f934dca,0xa866aa344f934dca,correctness/<platform>/math_fingerprint.log
+canonical_range,PASS (min=-2292 max=2307 q=4621 centred=1),PASS (min=-2292 max=2307 q=4621 centred=1),PASS (min=-2292 max=2307 q=4621 centred=1),correctness/<platform>/math_fingerprint.log
+core_equivalence_100k,PASS,PASS,PASS,"100000 random tests plus fixed cases, seed=20260901"
+kem_transcript_1000,PASS,PASS,PASS,"1000 cases, byte for byte"
+end_to_end_oracle,PASS cases=21971,PASS cases=21971,PASS cases=21971,core_vs_oracle=identical; cases_hash=c53ec27ecdbb56bf
+oracle_reference_cases,1971,1971,1971,oracle_hash_check.log
+internal_construction_selftest,PASS 1000,PASS 1000,PASS 1000,random_tests=1000 seed=20260901
+concurrent_first_call,PASS 32 threads,PASS 32 threads,PASS 32 threads,concurrent_firstcall.log
+tsan_concurrent_first_call,PASS,PASS,PASS,concurrent_firstcall_tsan.log
+asan_ubsan,PASS,PASS,PASS,security/STATUS.txt
+stack_usage_max_bytes,31872,31840,31872,budget=65536
+selftest_isolation,PASS,PASS,PASS,production view unchanged
+core_correctness_hash,0xfe69baced6245e47,0xfe69baced6245e47,0xfe69baced6245e47,all builds and arms
+single_bit_flip_all_positions,PASS,PASS,PASS,validation rerun: 4 ciphertexts x 7176 flips per platform (28704 flips total); see csv/validation_single_bit_flip.csv

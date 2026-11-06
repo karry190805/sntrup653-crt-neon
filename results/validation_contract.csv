@@ -1,0 +1,4 @@
+platform,execution,classes,cases_per_class,mismatches,low73_max_abs,low73_bias,low73_max_plus_bias,int32_safe,result
+A76,native,6,100000,0,99061,337333,436394,1,PASS
+A53,native,6,100000,0,99061,337333,436394,1,PASS
+X1C,native,6,100000,0,99061,337333,436394,1,PASS

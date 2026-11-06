@@ -1,0 +1,7 @@
+platform,implementation,mul_exact,mla_exact,add_exact,sub_exact,ldr_exact,str_exact,mul_group,mac_group,add_group,sub_group,load_group,store_group,note
+a53,optimized,104,0,793,523,530,869,894,1195,881,714,875,1314,static objdump -d counts of one call site
+a53,baseline,17,28,68,70,76,21,24,155,72,77,181,48,static objdump -d counts of one call site
+a76,optimized,200,0,937,539,758,894,921,1109,1017,729,1028,1323,static objdump -d counts of one call site
+a76,baseline,17,28,62,53,76,11,24,155,66,60,176,37,static objdump -d counts of one call site
+x1c,optimized,93,0,917,548,574,870,907,1123,1005,740,901,1305,static objdump -d counts of one call site
+x1c,baseline,17,28,64,53,64,11,24,155,68,60,167,35,static objdump -d counts of one call site

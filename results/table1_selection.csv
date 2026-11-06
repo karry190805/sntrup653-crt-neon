@@ -1,0 +1,4 @@
+platform,delivered_configuration,change_vs_previous,paired_speedup_vs_previous,ci95_low,ci95_high,wins,decision,source
+Cortex-A76,opt21-r2 source unchanged,none,,,,"unchanged","best candidate pw4+l2u2 = 1.001287 (+0.13%), below the 0.3% adoption threshold; 2352 MHz, CPU 7"
+Cortex-A53,pointwise batch 2 + explicit tail + gt_layer2_* unroll 2,"pointwise loop regrouped 4->2; explicit m=76 tail; #pragma GCC unroll 2 on gt_layer2_fwd16/inv16 cbase loops",1.072917,1.0587,1.0872,6/6,adopted,"paired campaign, 6/6 wins; 1512 MHz, CPU 3"
+Cortex-X1C,current device version (2x + l2u2 + no-lrs) unchanged,none,,,,"unchanged","all candidate batches <= 1.0; best pw2 = 0.999976; 2995.2 MHz, CPU 7"

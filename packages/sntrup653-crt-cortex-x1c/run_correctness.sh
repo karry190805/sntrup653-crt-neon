@@ -54,6 +54,17 @@ run_pinned "$BUILD_DIR/test_internal_construction" "$INTERNAL_TESTS" "$SEED" \
 grep -q 'internal construction selftest: PASS' "$RESULT_DIR/internal_construction.log" \
   || { echo "error: internal construction selftest did not pass" >&2; exit 3; }
 
+echo "[1/8] math fingerprint and canonical output range"
+MATH_FP_EXPECTED="$(sed -n 's/^math_fingerprint=//p' expected_math_fingerprint.txt | head -1)"
+[ -n "$MATH_FP_EXPECTED" ] \
+  || { echo "error: expected_math_fingerprint.txt has no fingerprint" >&2; exit 3; }
+run_pinned "$BUILD_DIR/test_math_fingerprint" "$MATH_FP_EXPECTED" \
+  | tee "$RESULT_DIR/math_fingerprint.log"
+grep -q 'math_fingerprint_check=PASS' "$RESULT_DIR/math_fingerprint.log" \
+  || { echo "error: math fingerprint changed" >&2; exit 3; }
+grep -q 'canonical_range=PASS' "$RESULT_DIR/math_fingerprint.log" \
+  || { echo "error: core output left the canonical centred range" >&2; exit 3; }
+
 echo "[2/8] baseline vs optimized core, byte for byte"
 run_pinned "$BUILD_DIR/test_core_equiv" "$CORE_TESTS" "$SEED" | tee "$RESULT_DIR/core_equiv.log"
 grep -q 'core equivalence: PASS' "$RESULT_DIR/core_equiv.log" \
@@ -146,5 +157,5 @@ grep -q 'selftest_isolation=PASS' "$RESULT_DIR/selftest_isolation.log" \
 
 cp "$BUILD_DIR/build_metadata.txt" "$RESULT_DIR/" 2>/dev/null || true
 cp BASELINE_DIFF.txt SOURCE_MANIFEST.sha256 expected_oracle_hashes.txt \
-   expected_production_core.sha256 "$RESULT_DIR/" 2>/dev/null || true
+   expected_production_core.sha256 expected_math_fingerprint.txt "$RESULT_DIR/" 2>/dev/null || true
 echo "correctness=PASS result_dir=$RESULT_DIR"

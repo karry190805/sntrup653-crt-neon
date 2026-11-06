@@ -1,0 +1,5 @@
+work,title,venue_year,pages,doi,target_parameter_set,platforms
+Alkim et al.,"Polynomial Multiplication in NTRU Prime: Comparison of Optimization Strategies on Cortex-M4",TCHES 2021(1),217-238,10.46586/tches.v2021.i1.217-238,ntrulpr761 / sntrup761,Cortex-M4
+"Hwang, Liu, Yang","Algorithmic Views of Vectorized Polynomial Multipliers – NTRU Prime",ACNS 2024 (LNCS 14584),24-46,10.1007/978-3-031-54773-7_2,ntrulpr761 / sntrup761,Cortex-A72
+Hwang,"Pushing the Limit of Vectorized Polynomial Multiplications for NTRU Prime",ACISP 2024 (LNCS 14896),84-102,10.1007/978-981-97-5028-3_5,sntrup761,Cortex-A72; Apple M1 Pro
+"Chiu, Yang, Wang","A New Trick for Polynomial Multiplication: A verified CRT polymul utilizing a monomial factor",TCHES 2025(4),795-816,10.46586/tches.v2025.i4.795-816,ntrulpr761 / sntrup761,Raspberry Pi 3/4/5 (Cortex-A53/A72/A76)

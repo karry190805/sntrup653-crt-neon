@@ -1,0 +1,11 @@
+group,symbols,total_bytes,note
+W16C block/weight table,W16C,8624,identical symbol sizes on A76/A53/X1C
+"DFT powers (POW11_F/I, POW7_F/I)",POW11_F+POW11_I+POW7_F+POW7_I,1360,identical symbol sizes on A76/A53/X1C
+"size-11 forward/inverse tables (M11Q, P11Q, PAIR11)",M11Q_F+M11Q_I+P11Q_F+P11Q_I+PAIR11_M_F+PAIR11_M_I+PAIR11_P_F+PAIR11_P_I,960,identical symbol sizes on A76/A53/X1C
+"size-7 forward/inverse tables (M7Q, P7Q, PAIR7)",M7Q_F+M7Q_I+P7Q_F+P7Q_I+PAIR7_M_F+PAIR7_M_I+PAIR7_P_F+PAIR7_P_I,512,identical symbol sizes on A76/A53/X1C
+root/lambda tables (LAMBDA77 and inverses),LAMBDA77+INV2_SQRT_LAMBDA77+INV2_SQRT_LAMBDA_INV77+SQRT_LAMBDA77,1232,identical symbol sizes on A76/A53/X1C
+Shoup tables (154-byte),INV2_SQRT_INV77_SHOUP+INV2_SQRT_SHOUP+QMSQRT_LAMBDA_SHOUP+SQRT_LAMBDA_SHOUP,616,identical symbol sizes on A76/A53/X1C
+"pairing/index tables (GT_IDX_RS, GT_K_UV, ACTIVE_COL_LIST)",GT_IDX_RS+GT_K_UV+ACTIVE_COL_LIST,924,identical symbol sizes on A76/A53/X1C
+W16 inverse constants,W16_INV2_INV77+W16_INV2_INV77_SHOUP,32,identical symbol sizes on A76/A53/X1C
+runtime table state,tables_state,4,identical symbol sizes on A76/A53/X1C
+TOTAL static tables + runtime state,(all bss table symbols),14264,equals .bss 14264 plus 12 bytes .rodata string

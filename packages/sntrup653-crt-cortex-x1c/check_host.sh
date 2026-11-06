@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Verify that the current process is on the intended native board and core.
 set -euo pipefail
 . "$(dirname "$0")/platform.conf"
 
@@ -32,8 +33,27 @@ if ! taskset -c "$CPU_PIN" true >/dev/null 2>&1; then
   exit 4
 fi
 
+hostname="$(uname -n 2>/dev/null || true)"
+kernel="$(uname -r 2>/dev/null || true)"
+board_model="$(tr -d '\000' < /proc/device-tree/model 2>/dev/null || true)"
+board_model="${board_model%$'\n'}"
+
+if [ -n "${BOARD_MODEL:-}" ]; then
+  case "$board_model" in
+    *"$BOARD_MODEL"*) ;;
+    *)
+      if [ "${ALLOW_NON_TARGET:-0}" != "1" ]; then
+        echo "error: board model '$board_model' does not match '$BOARD_MODEL'" >&2
+        exit 6
+      fi
+      echo "warning: board model '$board_model' does not match '$BOARD_MODEL'" >&2
+      ;;
+  esac
+fi
+
 confirmed=0
 evidence=""
+midr=""
 midr_file="/sys/devices/system/cpu/cpu${CPU_PIN}/regs/identification/midr_el1"
 if [ -r "$midr_file" ]; then
   midr="$(tr '[:upper:]' '[:lower:]' < "$midr_file" 2>/dev/null | tr -d ' \n')"
@@ -68,4 +88,4 @@ if [ "$confirmed" -eq 0 ]; then
   echo "warning: target core is unverified: ${evidence:-no per-core model data}" >&2
 fi
 
-echo "host_check=PASS arch=$arch cpu_pin=$CPU_PIN confirmed=$confirmed evidence='${evidence:-none}'"
+echo "host_check=PASS arch=$arch hostname=$hostname board_model='${board_model:-unknown}' cpu_pin=$CPU_PIN midr=${midr:-unknown} kernel=$kernel confirmed=$confirmed evidence='${evidence:-none}'"

@@ -1,0 +1,7 @@
+platform,object,text_bytes,data_bytes,bss_bytes,dec_bytes,note
+a53,optimized_core.o,34751,0,14576,49327,size(1); text includes .rodata
+a53,baseline_core.o,4508,0,0,4508,size(1); text includes .rodata
+a76,optimized_core.o,35811,0,14576,50387,size(1); text includes .rodata
+a76,baseline_core.o,4156,0,0,4156,size(1); text includes .rodata
+x1c,optimized_core.o,35079,0,14576,49655,size(1); text includes .rodata
+x1c,baseline_core.o,4120,0,0,4120,size(1); text includes .rodata

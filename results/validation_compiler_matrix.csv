@@ -1,0 +1,4 @@
+platform,execution,hash_pass,hash_total,core_pass,core_total,math_pass,math_total,kem_pass,kem_total,result
+A76,native,10,10,10,10,10,10,10,10,PASS
+A53,native,10,10,10,10,10,10,10,10,PASS
+X1C,native,10,10,10,10,10,10,10,10,PASS

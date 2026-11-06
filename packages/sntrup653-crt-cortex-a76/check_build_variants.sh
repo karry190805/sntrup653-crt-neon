@@ -30,6 +30,8 @@ SEED="${VAR_SEED:-1}"
 CPU_PIN="${CPU_PIN:-}"
 
 CFLAGS="-O3 -std=gnu11 -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -Wall -Wextra -mcpu=$CPU_TARGET -mtune=$CPU_TARGET -fomit-frame-pointer -fno-lto"
+# Same optimized-core-only flags as build.sh.
+OPT_CFLAGS="${OPT_CFLAGS:--funroll-loops -fvect-cost-model=unlimited -fno-guess-branch-probability -fno-tree-slp-vectorize -falign-functions=32 -fmodulo-sched -flive-range-shrinkage}"
 REQUIRE_NEON="-DSNTRUP653_REQUIRE_AARCH64_NEON=1"
 COMMON_DEFS="-DSNTRUP653_USE_INPLACE_BUFFERS=1 -DSNTRUP653_PUBLIC_ZS_MODE=1 -DSNTRUP653_LOW73_NEON=1 -DSNTRUP653_FINAL_FOLD_NEON=1 -DUSE_BARRETT_REDUCE=1"
 
@@ -43,6 +45,7 @@ VARIANTS=(
   "low73_scalar|-DSNTRUP653_LOW73_NEON=0"
   "fold_scalar|-DSNTRUP653_FINAL_FOLD_NEON=0"
   "no_barrett|-DUSE_BARRETT_REDUCE=0"
+  "no_fast16|-DSNTRUP653_FAST16=0"
   "all_fallbacks|-DSNTRUP653_USE_INPLACE_BUFFERS=0 -DSNTRUP653_PUBLIC_ZS_MODE=0 -DSNTRUP653_LOW73_NEON=0 -DSNTRUP653_FINAL_FOLD_NEON=0 -DUSE_BARRETT_REDUCE=0"
 )
 
@@ -80,12 +83,12 @@ for entry in "${VARIANTS[@]}"; do
   mkdir -p "$dir"
   echo "[variant] $name defs='${defs:-<none>}'" | tee -a "$LOG"
 
-  if ! "$CC" $CFLAGS $REQUIRE_NEON $defs \
+  if ! "$CC" $CFLAGS $OPT_CFLAGS $REQUIRE_NEON $defs \
       -DPQCLEAN_SNTRUP653_CLEAN_crypto_core_multsntrup653=optimized_crypto_core_multsntrup653 \
       -Ioptimized -c optimized/crypto_core_multsntrup653.c -o "$dir/optimized_core.o" >> "$LOG" 2>&1; then
     echo "  compile failed" | tee -a "$LOG"; failed=$((failed + 1)); continue
   fi
-  if ! "$CC" $CFLAGS $REQUIRE_NEON $defs -DSNTRUP653_INTERNAL_TEST_HOOKS=1 \
+  if ! "$CC" $CFLAGS $OPT_CFLAGS $REQUIRE_NEON $defs -DSNTRUP653_INTERNAL_TEST_HOOKS=1 \
       -DPQCLEAN_SNTRUP653_CLEAN_crypto_core_multsntrup653=internal_crypto_core_multsntrup653 \
       -Ioptimized shared/test_internal_construction.c optimized/crypto_core_multsntrup653.c \
       optimized/crypto_encode_653xint16.c optimized/crypto_decode_653xint16.c \
@@ -104,9 +107,19 @@ for entry in "${VARIANTS[@]}"; do
       -o "$dir/test_endtoend_oracle" >> "$LOG" 2>&1; then
     echo "  compile(oracle) failed" | tee -a "$LOG"; failed=$((failed + 1)); continue
   fi
+  bench_srcs=()
+  for f in optimized/*.c; do
+    [ "${f##*/}" = "crypto_core_multsntrup653.c" ] && continue
+    bench_srcs+=("$f")
+  done
+  if ! "$CC" $CFLAGS $OPT_CFLAGS $REQUIRE_NEON $defs -Ioptimized \
+      -c optimized/crypto_core_multsntrup653.c -o "$dir/bench_core_obj.o" >> "$LOG" 2>&1; then
+    echo "  compile(bench core) failed" | tee -a "$LOG"; failed=$((failed + 1)); continue
+  fi
   if ! "$CC" $CFLAGS $REQUIRE_NEON $defs \
       -DBENCH_IMPL_TAG=variant-$name -DBENCH_BACKEND_TAG="$name" \
-      shared/bench_core_mult.c shared/randombytes.c shared/sha2.c optimized/*.c \
+      shared/bench_core_mult.c shared/randombytes.c shared/sha2.c "${bench_srcs[@]}" \
+      "$dir/bench_core_obj.o" \
       -Ioptimized -Ishared -o "$dir/bench_core_optimized" >> "$LOG" 2>&1; then
     echo "  compile(bench) failed" | tee -a "$LOG"; failed=$((failed + 1)); continue
   fi

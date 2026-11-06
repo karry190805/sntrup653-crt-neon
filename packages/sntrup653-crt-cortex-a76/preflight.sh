@@ -78,7 +78,7 @@ fi
 if command -v clang >/dev/null 2>&1; then
   ok "clang -> $(clang --version 2>/dev/null | head -1)"
 else
-  fail "clang is missing; install it with: sudo apt-get update && sudo apt-get install -y clang"
+  warn "clang is missing; the compiler matrix will report gcc only (install clang for the full 10-combination sweep)"
 fi
 echo
 
@@ -117,7 +117,7 @@ if [ -n "${CPU_PIN:-}" ]; then
       ;;
   esac
 else
-  note "CPU_PIN is unset; run_all.sh will detect it, run_release.sh requires it"
+  note "CPU_PIN is unset; run_opt22_campaign.sh requires it"
 fi
 echo
 

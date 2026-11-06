@@ -1,0 +1,8 @@
+# expected_math_fingerprint.txt
+# FNV-1a-64 over every mathematical constant of the delivered core:
+# p, q, w, the 77-point Good-Thomas index maps, the direct 7/11-point
+# DFT tables, the packed 16-bit Shoup tables, the radix-2/TMVP weights,
+# and the public pruning schedule.  It must be identical for every build
+# variant and every compiler/optimisation level; see
+# check_math_fingerprint.sh.
+math_fingerprint=0xa866aa344f934dca

@@ -1,4 +1,4 @@
-# Range and security scope, revision 20261016
+# Range and security scope, revision 20261103 (opt22)
 
 ## Interface
 
@@ -43,10 +43,28 @@ representatives for Fq_freeze. This is a source model, not a machine-code proof.
 Because a compiler may reassociate or vectorise regardless of what the source
 model says, the model is complemented by an empirical build sweep:
 check_multicompiler.sh builds the same core with gcc and clang at
--O0 -O1 -O2 -O3 -Os and requires one bit-identical correctness hash over ten
-combinations. That is coverage, not a proof of the compiled artefacts, and it is
+-O0 -O1 -O2 -O3 -Os and requires one bit-identical correctness hash over the
+ten combinations. The delivered host has both compilers, so the recorded
+evidence is the full matrix (`compilers_tested=2`, `compilers_missing=0`). If
+clang is absent the script prints `compilers_missing` rather than pretending it
+was tested. That is coverage, not a proof of the compiled artefacts, and it is
 reported as coverage. A machine-code logical equivalence check of the kind a
 fully formal treatment needs is not attempted.
+
+The five-step 11-point first layer needs a literal lane number for
+vmlal_laneq_s16. GCC supplies one through `#pragma GCC unroll 5` plus
+SNTRUP_UNROLL_ATTR; clang -O0 does not unroll and would reject `j - 1`, so the
+clang path expands the same five steps through SNTRUP_DFT11_STEP16 with literal
+lane numbers. Both paths perform the same arithmetic and produce the same
+correctness hash; the GCC machine code and cycle count are unchanged.
+
+The opt21 int16 path narrows values only after proving they are in [0,2q), and
+still accumulates products in int32 via vmlal. The table above is therefore
+unchanged: the narrow stores are exact, not truncating, and the Barrett step
+runs at 32 bits. The one deliberately non-bit-identical intermediate is the
+half-pair AM-only case, which uses M*(q-AM) instead of AM*(q-M); the two are
+congruent modulo q and the final canonical outputs are identical. This is
+covered by the 100000-case core equivalence and the 1000-case KEM transcript.
 
 The two end-to-end sweeps that exercise the folding bounds are exhaustive rather
 than sampled: test_endtoend_oracle covers every monomial pair, and internal
