@@ -14,6 +14,20 @@ scheduled for Cortex-A53, Cortex-A76, and Cortex-X1C separately.
 
 ## Source layout
 
+The top-level layout follows the compact structure used by the reference
+`CRTWithMonomial` repository: `CMakeLists.txt`, `src/`, `include/`, `bench/`,
+and `scripts/` provide a short entry point for reviewers. The complete
+platform-specific source and validation material remains under `packages/`.
+
+On an AArch64 host, the top-level build can be started with:
+
+```bash
+./scripts/build.sh
+```
+
+The correctness and campaign commands are documented in the selected platform
+package and can be launched with `./scripts/test.sh` on the target board.
+
 * [`packages/sntrup653-crt-cortex-a53`](packages/sntrup653-crt-cortex-a53)
 * [`packages/sntrup653-crt-cortex-a76`](packages/sntrup653-crt-cortex-a76)
 * [`packages/sntrup653-crt-cortex-x1c`](packages/sntrup653-crt-cortex-x1c)
