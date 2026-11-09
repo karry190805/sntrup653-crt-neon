@@ -2,7 +2,7 @@
 """Executable arithmetic checks supporting RANGE_AND_SECURITY.md."""
 Q = 4621
 M = Q - 1
-OFFSET = Q * 25000
+OFFSET = Q * 30000
 I32 = (1 << 31) - 1
 
 for n in (7, 11):

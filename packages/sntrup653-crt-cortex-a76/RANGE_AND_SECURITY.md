@@ -10,7 +10,7 @@ Production uses all four optimization switches =1 and USE_BARRETT_REDUCE=1.
 
 ## Source-schedule bounds
 
-Let M=4620 and O=4621*25000=115525000. Each transform layer reduces to [0,M]
+Let M=4620 and O=4621*30000=138630000. Each transform layer reduces to [0,M]
 before the next layer consumes it. Constants are also canonical.
 
 | Stage | Intermediate bounds | Storage/output |
@@ -20,9 +20,9 @@ before the next layer consumes it. Constants are also canonical.
 | Pair sum/difference | S in [0,9240]; raw D in [-4620,4620], corrected D in [0,4620] | int32 |
 | One even/odd product | <=42688800 / <=21344400 | int32 |
 | 11-point E / D | <=213448620 / <=106722000 | int32 |
-| 11-point E+D / E-D+O | <=320170620 / [8803000,328973620] | nonnegative int32 |
+| 11-point E+D / E-D+O | <=320170620 / [31908000,352078620] | nonnegative int32 |
 | 7-point E / D | <=128071020 / <=64033200 | int32 |
-| 7-point E+D / E-D+O | <=192104220 / [51491800,243596020] | nonnegative int32 |
+| 7-point E+D / E-D+O | <=192104220 / [74596800,266701020] | nonnegative int32 |
 | Inverse normalization | <=M*M=21344400 | uint32 then reduction |
 | Local input narrowing | [0,4620], already reduced | int16, no truncation |
 | Local constant multiplication | <=M*M=21344400 | widening int32 |
