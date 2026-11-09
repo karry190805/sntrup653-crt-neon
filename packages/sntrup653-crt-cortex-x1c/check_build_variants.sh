@@ -9,7 +9,7 @@
 #
 # This script builds all of them, runs the three correctness suites on each, and
 # requires the core correctness hash to be identical across every variant.  It
-# also covers SNTRUP653_PUBLIC_ZS_RUNTIME_MASK=1, the legacy run-time-masking
+# also covers SNTRUP653_PUBLIC_ZS_RUNTIME_MASK=1, the runtime-masking compatibility
 # arm that the shipped build never compiles.
 #
 # usage: bash ./check_build_variants.sh [out_dir]
