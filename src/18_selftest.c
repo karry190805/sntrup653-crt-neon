@@ -164,8 +164,9 @@ int sntrup653_internal_selftest(unsigned random_tests, unsigned seed) {
 
     /* The actual production precondition: dense random values on every public
      * non-padding block, exact zeros on blocks >= ACTIVE_BLOCKS.  This drives
-     * the public_zs_forward == 1 schedule (specialised in mode 1, masking in
-     * mode 0) and compares it against the dense oracle. */
+     * the public_zs_forward == 1 schedule: mode 1 uses the specialised
+     * schedule (or the runtime mask when enabled), while mode 0 keeps the
+     * dense arithmetic.  Both are compared against the dense oracle. */
     for (trial = 0; trial < random_tests; trial++) {
         zero_blocks(in);
         for (i = 0; i < ACTIVE_BLOCKS; i++) {
