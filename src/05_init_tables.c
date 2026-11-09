@@ -146,7 +146,7 @@ static void init_tables(void) {
      * and performs 11-point DFTs over s. The lists below contain only public
      * non-padding positions; no secret value controls this schedule.
      * They are the run-time mirror of the SNTRUP_GT_ACT() constant expression
-     * and are still used by the legacy (SNTRUP653_PUBLIC_ZS_RUNTIME_MASK=1)
+     * and are still used by the runtime-mask (SNTRUP653_PUBLIC_ZS_RUNTIME_MASK=1)
      * path, by the dense path and by the internal self test. */
     for (r = 0; r < 7; r++) {
         int active_cnt = 0;

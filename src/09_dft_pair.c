@@ -45,9 +45,9 @@ static inline void dft11_pairwise_4lane(int32x4_t outv[11], const int32x4_t inv[
     }
 }
 
-/* Legacy public-zero pruning: still loads only the active columns, but the
+/* Runtime-mask public-zero pruning loads only the active columns, but the
  * pair schedule is decided at run time by pair_mask, whose test sits inside
- * the j loop.  Kept only for SNTRUP653_PUBLIC_ZS_RUNTIME_MASK = 1 (A/B runs).
+ * the j loop.  Retained for SNTRUP653_PUBLIC_ZS_RUNTIME_MASK = 1 (A/B runs).
  * The pruning masks depend only on public p=653 padding.
  * A pair is skipped only when both public input positions are zero. */
 static inline void dft11_pairwise_pruned_4lane(int32x4_t outv[11], const int32x4_t inv[11],
@@ -149,11 +149,11 @@ static inline void dft7_pairwise_4lane(int32x4_t outv[7], const int32x4_t inv[7]
  * times 5 values of k): the 95 bodies in half slots fall from 5 vector ops to
  * 2, and the 35 bodies in padding pairs fall from 5 to 0.  Per lane group the
  * pair arithmetic drops from 875 to 415 vector ops, a 52.6% reduction; steps
- * (1)+(4)+(5) remove the run-time overhead that used to eat that saving.
+ * (1)+(4)+(5) remove the run-time overhead present in the runtime-mask path.
  *
  * Every instance evaluates the same expression
  *     even_k = a_0 + sum_j P[k][j] * S_j ,   odd_k = sum_j M[k][j] * D_j ,
- *     Y_k = even_k + odd_k ,   Y_{11-k} = even_k - odd_k + q*25000
+ *     Y_k = even_k + odd_k ,   Y_{11-k} = even_k - odd_k + q*30000
  * as the dense kernel, with the same PAIR11_P_F / PAIR11_M_F table entries and
  * the same accumulator bounds, so the stored values are bit-identical to
  * SNTRUP653_PUBLIC_ZS_MODE = 0.

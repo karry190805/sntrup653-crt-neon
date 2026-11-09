@@ -43,11 +43,11 @@ _Static_assert(SNTRUP_GT_ACT_COUNT(0) == 6 && SNTRUP_GT_ACT_COUNT(1) == 6 &&
 #define SNTRUP653_PUBLIC_ZS_MODE 1
 #endif
 
-/* Legacy selector, kept for A/B measurement only.
+/* Compatibility selector, retained for A/B measurement only.
  * 0 (default): the public-zero pruning of the first layer is resolved at build
  *              time (one specialised, fully unrolled kernel per r).
- * 1          : the historical shape is kept - only the active columns are
- *              loaded and the pairs are skipped by a run-time mask test inside
+ * 1          : the runtime-mask shape loads only active columns; the pairs
+ *              are skipped by a run-time mask test inside
  *              the j loop of dft11_pairwise_pruned_4lane().
  * The meaning of SNTRUP653_PUBLIC_ZS_MODE (0 = dense, 1 = public-zero pruning)
  * is not affected by this switch. */

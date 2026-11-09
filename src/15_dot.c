@@ -17,7 +17,7 @@ static int D_idx(const Blocks77 Cblk, const int clow[LOW_N], int idx) {
 static inline int32_t dot_i16_neon_4lane(const int16_t *x, const int16_t *y, int n) {
     /* Four independent accumulators break the vmlal latency chain; the
      * 73 low-part dots are run one after another, so a single dependent
-     * accumulator used to serialise almost the whole stage. */
+     * accumulator would otherwise serialise almost the whole stage. */
     int32x4_t a0 = vdupq_n_s32(0), a1 = vdupq_n_s32(0);
     int32x4_t a2 = vdupq_n_s32(0), a3 = vdupq_n_s32(0);
     int i;
