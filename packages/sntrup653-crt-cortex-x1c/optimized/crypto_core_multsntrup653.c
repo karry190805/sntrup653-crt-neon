@@ -1134,8 +1134,8 @@ static inline void dft7_pairwise_4lane(int32x4_t outv[7], const int32x4_t inv[7]
  *       stays within the non-negative precondition of store_mod_q_s32x4();
  *   (4) keep the surviving column vectors in NEON registers (named c0, p1..p5,
  *       m1..m5 - never an indirect index);
- *   (5) drop the pair-mask load, the compare and the branch that the old
- *       run-time loop spent on every (k,j) step, and drop the j/k loop
+ *   (5) drop the pair-mask load, the compare and the branch that the runtime-mask
+ *       loop spends on every (k,j) step, and drop the j/k loop
  *       control entirely.
  *
  * Steps (2)+(3) act on 130 of the 175 (r,j,k) term bodies (35 (r,j) slots

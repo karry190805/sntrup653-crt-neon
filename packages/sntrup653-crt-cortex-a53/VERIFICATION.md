@@ -204,11 +204,11 @@ package's default switch settings, and hash what remains.
 
 ```bash
 python3 ./check_selftest_isolation.py
-# selftest_isolation=PASS production view unchanged (c8d4791b931f30c9)
+# selftest_isolation=PASS production view unchanged (788663c83e79081d)
 ```
 
-The production view of the core is 2048 lines and hashes to
-`f7c6f935f404bc4a19d3be4ab24591a503eaf89b2ba6ad63a3567b49c83d828b`. That is the digest recorded in
+The production view of the core is 2051 lines and hashes to
+`788663c83e79081d27d90571745fc857da8622495708ed9872d5c67a1255e30a`. That is the digest recorded in
 `expected_production_core.sha256`, so
 every line outside the `SNTRUP653_INTERNAL_TEST_HOOKS` conditionals is the
 delivered production translation unit. Any edit outside those conditionals

@@ -43,11 +43,11 @@ separate `scale3` operation handles the `3v` case.
 
 | Platform | Baseline | Optimized | Speedup |
 |---|---:|---:|---:|
-| Cortex-A53 | 567,916.9 | 45,757.4 | 12.411x |
-| Cortex-A76 | 164,192.3 | 24,189.5 | 6.788x |
-| Cortex-X1C | 144,355.4 | 12,331.0 | 11.707x |
+| Cortex-A53 | 567,917.2 | 45,412.7 | 12.506x |
+| Cortex-A76 | 162,428.9 | 24,178.4 | 6.718x |
+| Cortex-X1C | 144,419.5 | 12,329.9 | 11.713x |
 
-End-to-end KEM total speedups are 1.087x, 1.048x, and 1.087x respectively.
+End-to-end KEM total speedups are 1.0873x, 1.0503x, and 1.0867x respectively. The full 2026-11-09 evidence is in [`results/summary_20261109.csv`](results/summary_20261109.csv) and [`results/SUMMARY_20261109.md`](results/SUMMARY_20261109.md).
 These are measurements of the supplied builds, not a claim about all AArch64
 processors.
 
@@ -61,4 +61,4 @@ verification of the complete binary.
 
 ## Version
 
-The current release is tagged `v1.1.0`.
+The current release is the 2026-11-09 three-platform remeasurement. The repository records the validation limits and does not claim a formal side-channel proof.

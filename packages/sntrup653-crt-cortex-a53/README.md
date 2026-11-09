@@ -11,17 +11,17 @@ Pointwise loop batched 2 at a time plus one explicit tail block (all 77 blocks c
 
 ## Start here
 
-`../RUN_ZH.md` in the package root explains the full command set, the exact
-expected status lines and the interpretation limits. The platform-specific
-change record is `OPT22_CHANGES_zh.md`.
+`VERIFICATION.md` explains the validation scope and interpretation limits.
+The full command set is documented by the `run_*.sh` scripts in this package;
+the platform-specific change record is `OPT22_CHANGES_zh.md`.
 
 ## Invariants for this tree
 
 ```text
 core_correctness_hash   = 0xfe69baced6245e47
 math_fingerprint        = 0xa866aa344f934dca
-optimized core sha256   = 64f1c4dc051488e3ff7aed47df97a65c1d00bcd7ccc100ac650e020383258bf9
-production view sha256  = f7c6f935f404bc4a19d3be4ab24591a503eaf89b2ba6ad63a3567b49c83d828b
+optimized core sha256   = e0d3e22e9738ba44ce8a04af2ca04729ace59a735982f765ae5e1b9eedff50fe
+production view sha256  = 788663c83e79081d27d90571745fc857da8622495708ed9872d5c67a1255e30a
 ```
 
 ## Quick run

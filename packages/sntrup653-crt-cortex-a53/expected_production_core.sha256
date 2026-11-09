@@ -3,4 +3,4 @@
 # SNTRUP653_INTERNAL_TEST_HOOKS conditional removed, i.e. what the
 # production translation unit contains.
 # Regenerate with: python3 check_selftest_isolation.py --write
-production_view_sha256=f7c6f935f404bc4a19d3be4ab24591a503eaf89b2ba6ad63a3567b49c83d828b
+production_view_sha256=788663c83e79081d27d90571745fc857da8622495708ed9872d5c67a1255e30a
