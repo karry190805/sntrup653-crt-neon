@@ -41,15 +41,16 @@ separate `scale3` operation handles the `3v` case.
 
 ## Reported measurements
 
+PMU core cycles per polynomial-multiplication call (`perf stat -r 5`, 50,000 calls, same-platform A/B):
+
 | Platform | Baseline | Optimized | Speedup |
 |---|---:|---:|---:|
-| Cortex-A53 | 567,917.2 | 45,412.7 | 12.506x |
-| Cortex-A76 | 162,428.9 | 24,178.4 | 6.718x |
-| Cortex-X1C | 144,419.5 | 12,329.9 | 11.713x |
+| Cortex-A53 | 567,937.2 | 45,859.5 | 12.384x |
+| Cortex-A76 | 163,091.8 | 24,176.2 | 6.746x |
+| Cortex-X1C | 144,464.7 | 12,329.5 | 11.717x |
 
-End-to-end KEM total speedups are 1.0873x, 1.0503x, and 1.0867x respectively. The full 2026-11-09 evidence is in [`results/summary_20261109.csv`](results/summary_20261109.csv) and [`results/SUMMARY_20261109.md`](results/SUMMARY_20261109.md).
-These are measurements of the supplied builds, not a claim about all AArch64
-processors.
+End-to-end KEM total speedups (ABBA-paired, 2,000 pairs) are 1.050x (A76), 1.087x (A53), and 1.088x (X1C). The full evidence is in [`results/table3_pmu.csv`](results/table3_pmu.csv) (core), [`results/table4_kem.csv`](results/table4_kem.csv) (KEM) and [`results/table6_ablation.csv`](results/table6_ablation.csv).
+These are measurements of the supplied builds on the listed cores, not a claim about all AArch64 processors.
 
 ## Verification
 
@@ -61,4 +62,4 @@ verification of the complete binary.
 
 ## Version
 
-The current release is the 2026-11-09 three-platform remeasurement. The repository records the validation limits and does not claim a formal side-channel proof.
+The current release is the 2026-11-10 three-platform remeasurement. The repository records the validation limits and does not claim a formal side-channel proof.
