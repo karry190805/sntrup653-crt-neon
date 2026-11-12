@@ -11,17 +11,17 @@ No source change from the current device version (2x pointwise + l2u2 + no live-
 
 ## Start here
 
-`VERIFICATION.md` explains the validation scope and interpretation limits.
-The full command set is documented by the `run_*.sh` scripts in this package;
-the platform-specific change record is `OPT22_CHANGES_zh.md`.
+`../RUN_ZH.md` in the package root explains the full command set, the exact
+expected status lines and the interpretation limits. The platform-specific
+change record is `OPT22_CHANGES_zh.md`.
 
 ## Invariants for this tree
 
 ```text
 core_correctness_hash   = 0xfe69baced6245e47
 math_fingerprint        = 0xa866aa344f934dca
-optimized core sha256   = 755b7e2b5e7b4b59261e24c7c365dd0f533e0c952c216828588d60ad6b7a1eb2
-production view sha256  = c88f7ef866441abd6fd29cac46d2dc098bbd9b15db489bef137c4c0bb08061e5
+optimized core sha256   = 489ebdb87039931c4840fd4861ea53d5caeb8b59cb76650d9a0c297314832003
+production view sha256  = 489fd82ad813114b2e6b13e588cba3b06e47e85dd60948e12cb86de08ca5e1cf
 ```
 
 ## Quick run

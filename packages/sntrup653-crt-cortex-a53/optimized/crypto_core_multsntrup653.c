@@ -167,11 +167,11 @@ _Static_assert(SNTRUP_GT_ACT_COUNT(0) == 6 && SNTRUP_GT_ACT_COUNT(1) == 6 &&
 #define SNTRUP653_PUBLIC_ZS_MODE 1
 #endif
 
-/* Compatibility selector, retained for A/B measurement only.
+/* Legacy selector, kept for A/B measurement only.
  * 0 (default): the public-zero pruning of the first layer is resolved at build
  *              time (one specialised, fully unrolled kernel per r).
- * 1          : the runtime-mask shape loads only active columns; the pairs
- *              are skipped by a run-time mask test inside
+ * 1          : the historical shape is kept - only the active columns are
+ *              loaded and the pairs are skipped by a run-time mask test inside
  *              the j loop of dft11_pairwise_pruned_4lane().
  * The meaning of SNTRUP653_PUBLIC_ZS_MODE (0 = dense, 1 = public-zero pruning)
  * is not affected by this switch. */
@@ -551,7 +551,7 @@ static void init_tables(void) {
      * and performs 11-point DFTs over s. The lists below contain only public
      * non-padding positions; no secret value controls this schedule.
      * They are the run-time mirror of the SNTRUP_GT_ACT() constant expression
-     * and are still used by the runtime-mask (SNTRUP653_PUBLIC_ZS_RUNTIME_MASK=1)
+     * and are still used by the legacy (SNTRUP653_PUBLIC_ZS_RUNTIME_MASK=1)
      * path, by the dense path and by the internal self test. */
     for (r = 0; r < 7; r++) {
         int active_cnt = 0;
@@ -1038,9 +1038,9 @@ static inline void dft11_pairwise_4lane(int32x4_t outv[11], const int32x4_t inv[
     }
 }
 
-/* Runtime-mask public-zero pruning loads only the active columns, but the
+/* Legacy public-zero pruning: still loads only the active columns, but the
  * pair schedule is decided at run time by pair_mask, whose test sits inside
- * the j loop.  Retained for SNTRUP653_PUBLIC_ZS_RUNTIME_MASK = 1 (A/B runs).
+ * the j loop.  Kept only for SNTRUP653_PUBLIC_ZS_RUNTIME_MASK = 1 (A/B runs).
  * The pruning masks depend only on public p=653 padding.
  * A pair is skipped only when both public input positions are zero. */
 static inline void dft11_pairwise_pruned_4lane(int32x4_t outv[11], const int32x4_t inv[11],
@@ -1134,15 +1134,15 @@ static inline void dft7_pairwise_4lane(int32x4_t outv[7], const int32x4_t inv[7]
  *       stays within the non-negative precondition of store_mod_q_s32x4();
  *   (4) keep the surviving column vectors in NEON registers (named c0, p1..p5,
  *       m1..m5 - never an indirect index);
- *   (5) drop the pair-mask load, the compare and the branch that the runtime-mask
- *       loop spends on every (k,j) step, and drop the j/k loop
+ *   (5) drop the pair-mask load, the compare and the branch that the old
+ *       run-time loop spent on every (k,j) step, and drop the j/k loop
  *       control entirely.
  *
  * Steps (2)+(3) act on 130 of the 175 (r,j,k) term bodies (35 (r,j) slots
  * times 5 values of k): the 95 bodies in half slots fall from 5 vector ops to
  * 2, and the 35 bodies in padding pairs fall from 5 to 0.  Per lane group the
  * pair arithmetic drops from 875 to 415 vector ops, a 52.6% reduction; steps
- * (1)+(4)+(5) remove the run-time overhead present in the runtime-mask path.
+ * (1)+(4)+(5) remove the run-time overhead that used to eat that saving.
  *
  * Every instance evaluates the same expression
  *     even_k = a_0 + sum_j P[k][j] * S_j ,   odd_k = sum_j M[k][j] * D_j ,
@@ -2066,7 +2066,7 @@ static int D_idx(const Blocks77 Cblk, const int clow[LOW_N], int idx) {
 static inline int32_t dot_i16_neon_4lane(const int16_t *x, const int16_t *y, int n) {
     /* Four independent accumulators break the vmlal latency chain; the
      * 73 low-part dots are run one after another, so a single dependent
-     * accumulator would otherwise serialise almost the whole stage. */
+     * accumulator used to serialise almost the whole stage. */
     int32x4_t a0 = vdupq_n_s32(0), a1 = vdupq_n_s32(0);
     int32x4_t a2 = vdupq_n_s32(0), a3 = vdupq_n_s32(0);
     int i;
@@ -2437,9 +2437,8 @@ int sntrup653_internal_selftest(unsigned random_tests, unsigned seed) {
 
     /* The actual production precondition: dense random values on every public
      * non-padding block, exact zeros on blocks >= ACTIVE_BLOCKS.  This drives
-     * the public_zs_forward == 1 schedule: mode 1 uses the specialised
-     * schedule (or the runtime mask when enabled), while mode 0 keeps the
-     * dense arithmetic.  Both are compared against the dense oracle. */
+     * the public_zs_forward == 1 schedule (specialised in mode 1, masking in
+     * mode 0) and compares it against the dense oracle. */
     for (trial = 0; trial < random_tests; trial++) {
         zero_blocks(in);
         for (i = 0; i < ACTIVE_BLOCKS; i++) {

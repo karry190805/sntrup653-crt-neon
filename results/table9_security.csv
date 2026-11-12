@@ -1,8 +1,8 @@
 check,a76,a53,x1c,threshold_or_scope
-timing_screen_mode0,NO_SIGNAL,NO_SIGNAL,NO_SIGNAL,200000 samples (100000 per class); a76 max|t|=0.716393 / a53 max|t|=1.149058 / x1c max|t|=1.356978; threshold |t|=5
-timing_screen_mode1,NO_SIGNAL,NO_SIGNAL,NO_SIGNAL,200000 samples (100000 per class); a76 max|t|=1.437657 / a53 max|t|=1.748571 / x1c max|t|=1.198915; threshold |t|=5
+timing_screen_mode0,NO_SIGNAL,NO_SIGNAL,NO_SIGNAL,200000 samples (100000 per class); a76 max|t|=1.659040 / a53 max|t|=2.312970 / x1c max|t|=2.878321; threshold |t|=5
+timing_screen_mode1,NO_SIGNAL,NO_SIGNAL,NO_SIGNAL,200000 samples (100000 per class); a76 max|t|=2.195591 / a53 max|t|=1.122316 / x1c max|t|=2.228412; threshold |t|=5
 timing_method,raw first-order Welch,raw first-order Welch,raw first-order Welch,not dudect; not a formal guarantee
-dudect,NO_LEAKAGE_EVIDENCE_YET max|t|=2.26,NO_LEAKAGE_EVIDENCE_YET max|t|=2.56,NO_LEAKAGE_EVIDENCE_YET max|t|=2.82,"dudect default scheduler (up to 5 chunks); statistical screen only, not a proof"
+dudect,NO_LEAKAGE_EVIDENCE_YET max|t|=2.05,NO_LEAKAGE_EVIDENCE_YET max|t|=1.87,NO_LEAKAGE_EVIDENCE_YET max|t|=2.73,"dudect default scheduler (up to 5 chunks); statistical screen only, not a proof"
 ctgrind_valgrind,0 errors from 0 contexts,0 errors from 0 contexts,0 errors from 0 contexts,"Valgrind Memcheck; sk marked secret; 0 reported errors, not a formal proof"
 source_audit,no secret-dependent branch or index found,no secret-dependent branch or index found,no secret-dependent branch or index found,manual review of baseline/ and optimized/
 disassembly_audit,straight_line_probes=PASS,straight_line_probes=PASS,straight_line_probes=PASS,7 straight-line reducer probes
@@ -10,6 +10,4 @@ asan_ubsan_original,PASS,PASS,PASS,original campaign result; not the new harness
 asan_ubsan_new_harness,PASS,PASS,PASS,"new-harness subset: 1 ciphertext, 7,176 flips; ASan/UBSan"
 tsan,PASS,PASS,PASS,concurrent first-call
 full_binary_constant_time,NOT_PROVEN,NOT_PROVEN,NOT_PROVEN,security/STATUS.txt
-power_whole_system,not measured,not measured,idle 6.41 W; optimized core loop 10.31 W,X1C whole-system logger only; not a side-channel result
-em,not covered,not covered,not covered,no EM measurement
-scope_note,limited,limited,limited,"no significant timing difference under this sample/threshold; dudect no leakage evidence at stated sample size; ctgrind-style check 0 reported errors, not a proof; source/disassembly audit found no secret-dependent branches/accesses; X1C power whole-system only; EM NOT COVERED; full-binary NOT_PROVEN; not a formal guarantee"
+scope_note,limited,limited,limited,"no significant timing difference under this sample/threshold; dudect no leakage evidence at stated sample size; ctgrind-style check 0 reported errors, not a proof; source/disassembly audit found no secret-dependent branches/accesses; full-binary NOT_PROVEN; not a formal guarantee"

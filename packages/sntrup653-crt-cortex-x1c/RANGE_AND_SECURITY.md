@@ -125,7 +125,7 @@ Each mode defaults to 200000 samples, balanced shuffled labels, and checks
 max |t| at predetermined 10000-sample checkpoints. Threshold 5 produces ALERT
 and stops the workflow. It is a screening rule, not a multiple-look-calibrated
 confidence interval. Raw samples are saved. Do not rerun until a pass appears.
-NO_SIGNAL is not a constant-time proof or higher-order/power/EM leakage evidence.
+NO_SIGNAL is not a constant-time proof or higher-order leakage evidence.
 
 The timing harness links the production core object; the independently compiled
 benchmark core is disassembled as well. Sanitized timing is never benchmark data.

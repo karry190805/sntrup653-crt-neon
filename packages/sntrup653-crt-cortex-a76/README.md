@@ -11,17 +11,17 @@ No source change from opt21-r2. Eight pointwise batch shapes and the tail-shape 
 
 ## Start here
 
-`VERIFICATION.md` explains the validation scope and interpretation limits.
-The full command set is documented by the `run_*.sh` scripts in this package;
-the platform-specific change record is `OPT22_CHANGES_zh.md`.
+`../RUN_ZH.md` in the package root explains the full command set, the exact
+expected status lines and the interpretation limits. The platform-specific
+change record is `OPT22_CHANGES_zh.md`.
 
 ## Invariants for this tree
 
 ```text
 core_correctness_hash   = 0xfe69baced6245e47
 math_fingerprint        = 0xa866aa344f934dca
-optimized core sha256   = cc1128d661188b88d606179b6e0c6ac204fe407bbc0b50143006aca65b969d2c
-production view sha256  = 0fe3f143959edd9b09a7ee1313d907c22b710bfa156fa37aa77bffe35a37cc20
+optimized core sha256   = a2b4e171d6498a15a9c7ae2a1584545716916c32b9d2fef56579107231dc4b5e
+production view sha256  = aaa4e009ea77c644f2187874cea1c70b18a6dbaf1536133a70df58c081cd8abc
 ```
 
 ## Quick run

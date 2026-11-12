@@ -204,11 +204,11 @@ package's default switch settings, and hash what remains.
 
 ```bash
 python3 ./check_selftest_isolation.py
-# selftest_isolation=PASS production view unchanged (c88f7ef866441abd)
+# selftest_isolation=PASS production view unchanged (489fd82ad813114b)
 ```
 
-The production view of the core is 2054 lines and hashes to
-`c88f7ef866441abd6fd29cac46d2dc098bbd9b15db489bef137c4c0bb08061e5`. That is the digest recorded in
+The production view of the core is 2051 lines and hashes to
+`489fd82ad813114b2e6b13e588cba3b06e47e85dd60948e12cb86de08ca5e1cf`. That is the digest recorded in
 `expected_production_core.sha256`, so
 every line outside the `SNTRUP653_INTERNAL_TEST_HOOKS` conditionals is the
 delivered production translation unit. Any edit outside those conditionals
@@ -236,7 +236,7 @@ These are limitations, stated so that a reviewer does not have to find them.
    is not a guarantee about an unmeasured toolchain.
 5. **The timing screen is not a proof.** It is a first-order Welch test
    (`NO_SIGNAL`, threshold 5, no multiple-comparison correction), not dudect. It
-   has no power against higher-order effects, power, or EM leakage. `NO_SIGNAL`
+   has no sensitivity to higher-order effects. `NO_SIGNAL`
    means "this test did not detect a signal".
 6. **Sanitisers do not instrument inline assembly.** ASan and UBSan see the C,
    not the twenty or so inline AArch64 fragments that implement the constant

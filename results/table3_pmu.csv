@@ -1,7 +1,7 @@
 platform,implementation,core_calls,cycles_per_call,instructions_per_call,ipc,branch_miss_percent,note
-a76,baseline,50000,164192.259,410093.517,2.4976,0.118619,"perf stat -r 5, cycles:u/instructions:u/branch-misses:u"
-a76,optimized,50000,24189.544,39593.358,1.6368,0.000298,"perf stat -r 5, cycles:u/instructions:u/branch-misses:u"
-a53,baseline,50000,567916.893,404542.043,0.7123,0.542964,"perf stat -r 5, cycles:u/instructions:u/branch-misses:u"
-a53,optimized,50000,45757.373,37365.583,0.8166,0.058645,"perf stat -r 5, cycles:u/instructions:u/branch-misses:u"
-x1c,baseline,50000,144355.379,404275.156,2.8006,0.004730,"perf stat -r 5, cycles:u/instructions:u/branch-misses:u"
-x1c,optimized,50000,12331.005,37146.972,3.0125,0.000439,"perf stat -r 5, cycles:u/instructions:u/branch-misses:u"
+a76,baseline,50000,163091.769,410093.492,2.5145,0.100428,"perf stat -r 5, cycles:u/instructions:u/branch-misses:u"
+a76,optimized,50000,24176.240,39593.331,1.6377,0.000278,"perf stat -r 5, cycles:u/instructions:u/branch-misses:u"
+a53,baseline,50000,567937.235,404542.053,0.7123,0.543022,"perf stat -r 5, cycles:u/instructions:u/branch-misses:u"
+a53,optimized,50000,45859.481,37365.558,0.8148,0.059275,"perf stat -r 5, cycles:u/instructions:u/branch-misses:u"
+x1c,baseline,50000,144464.670,404275.206,2.7984,0.004565,"perf stat -r 5, cycles:u/instructions:u/branch-misses:u"
+x1c,optimized,50000,12329.506,37147.021,3.0129,0.000446,"perf stat -r 5, cycles:u/instructions:u/branch-misses:u"
